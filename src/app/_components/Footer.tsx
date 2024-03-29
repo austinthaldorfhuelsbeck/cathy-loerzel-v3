@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const discoverLinks = [
   { name: "About", href: "/about" },
-  { name: "Contact", href: "/contact" },
+  { name: "Contact", href: "/#contact" },
   { name: "Redeeming Heartache", href: "/redeeming-heartache" },
 ];
 

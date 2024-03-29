@@ -31,7 +31,7 @@ export default async function HomePage() {
 
       <SubscriptionForm />
 
-      <div>
+      <div id="contact">
         <ContactForm />
         <Link href="/redeeming-heartache">
           <Image
