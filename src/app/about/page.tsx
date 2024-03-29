@@ -1,10 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import ContactForm from "../_components/ContactForm";
-import ContentBlock from "../_components/ContentBlock";
-import SubFooter from "../_components/SubFooter";
-import SubscriptionForm from "../_components/SubscriptionForm";
+import ContactForm from "../_components/contact-form";
+import ContentBlock from "../_components/content-block";
+import SubFooter from "../_components/sub-footer";
+import SubscriptionForm from "../_components/subscription-form";
 
 export default function AboutPage() {
   return (

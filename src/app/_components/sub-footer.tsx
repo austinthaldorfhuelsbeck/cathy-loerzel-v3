@@ -1,8 +1,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
-import CategoryCards from "./CategoryCards";
-import FeaturedPostBanner from "./FeaturedPostBanner";
-import TagCards from "./TagCards";
+import CategoryCards from "./category-cards";
+import FeaturedPostBanner from "./featured-post-banner";
+import TagCards from "./tag-cards";
 
 function CategoriesSkeleton() {
   return (
@@ -28,12 +28,12 @@ function TagsSkeleton() {
 
 export default async function SubFooter(props: { title?: string }) {
   const featuredPost = await api.post.getFeatured();
-  const postCategories = await api.category.getPostCategories();
-  const postTags = await api.tag.getPostTags();
+  const postCategories = await api.category.getAllPostCategories();
+  const postTags = await api.tag.getAllPostTags();
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 lg:max-w-4xl">
-      <h1 className="text-muted-foreground px-5 text-4xl font-semibold sm:px-0">
+      <h1 className="px-5 text-4xl font-semibold text-muted-foreground sm:px-0">
         {props.title ?? "Blog"}
       </h1>
       {!featuredPost && <Skeleton className="h-48" />}
@@ -41,7 +41,7 @@ export default async function SubFooter(props: { title?: string }) {
       {!postCategories && <CategoriesSkeleton />}
       <CategoryCards categories={postCategories} />
       {!postTags && <TagsSkeleton />}
-      <h2 className="text-muted-foreground px-5 text-2xl font-semibold sm:px-0">
+      <h2 className="px-5 text-2xl font-semibold text-muted-foreground sm:px-0">
         Topics
       </h2>
       <TagCards tags={postTags} />

@@ -1,18 +1,28 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { z } from "zod";
 
 export const categoryRouter = createTRPCRouter({
-  getEventCategories: publicProcedure.query(({ ctx }) => {
+  getAllEventCategories: publicProcedure.query(({ ctx }) => {
     return ctx.db.category.findMany({
       where: {
         type: "EVENT",
       },
     });
   }),
-  getPostCategories: publicProcedure.query(({ ctx }) => {
+  getAllPostCategories: publicProcedure.query(({ ctx }) => {
     return ctx.db.category.findMany({
       where: {
         type: "POST",
       },
     });
   }),
+  getCategoryBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.category.findFirst({
+        where: {
+          slug: input.slug,
+        },
+      });
+    }),
 });

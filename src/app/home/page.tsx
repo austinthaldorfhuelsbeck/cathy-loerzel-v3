@@ -2,14 +2,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
 import Image from "next/image";
 import Link from "next/link";
-import CategoryCards from "../_components/CategoryCards";
-import ContactForm from "../_components/ContactForm";
-import SubFooter from "../_components/SubFooter";
-import SubscriptionForm from "../_components/SubscriptionForm";
+import CategoryCards from "../_components/category-cards";
+import ContactForm from "../_components/contact-form";
+import SubFooter from "../_components/sub-footer";
+import SubscriptionForm from "../_components/subscription-form";
 import Hero from "./_components/Hero";
 
 export default async function HomePage() {
-  const categories = await api.category.getEventCategories();
+  const categories = await api.category.getAllEventCategories();
 
   return (
     <>

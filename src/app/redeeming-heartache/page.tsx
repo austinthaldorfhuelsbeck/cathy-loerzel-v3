@@ -1,11 +1,11 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import ContentBlock from "../_components/ContentBlock";
-import SubFooter from "../_components/SubFooter";
-import SubscriptionForm from "../_components/SubscriptionForm";
-import HeaderCard from "./_components/HeaderCard";
-import Testimonials from "./_components/Testimonials";
+import ContentBlock from "../_components/content-block";
+import SubFooter from "../_components/sub-footer";
+import SubscriptionForm from "../_components/subscription-form";
+import HeaderCard from "./_components/header-card";
+import Testimonials from "./_components/testimonials";
 
 import sampleContents from "../../../public/images/redeeming-sample-contents.jpg";
 import stillLife from "../../../public/images/redeeming-still-life.jpg";
