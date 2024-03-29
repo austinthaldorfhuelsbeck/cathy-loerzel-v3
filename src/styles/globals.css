@@ -22,7 +22,7 @@
     --muted: 20 5.9% 90%;
     --muted-foreground: 21 15% 59%;
 
-    --accent: 28 44% 49%;
+    --accent: 10 37% 58%;
     --accent-foreground: 60 9.1% 97.8%;
 
     --destructive: 10 37% 58%;
@@ -33,6 +33,9 @@
     --ring: 28 44% 49%;
 
     --radius: 0.5rem;
+
+    --font-sans: 'Roboto';
+    --font-serif: 'Cormorant Garamond', serif;
   }
 }
 

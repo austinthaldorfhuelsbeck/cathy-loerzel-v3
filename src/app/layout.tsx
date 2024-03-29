@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "bg-background min-h-screen font-serif antialiased",
+          "bg-background h-screen font-serif antialiased",
           cormorant.variable,
         )}
       >

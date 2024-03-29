@@ -2,13 +2,13 @@ import { authMiddleware } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export default authMiddleware({
-  publicRoutes: ["/", "/page", "/sign-in"],
+  publicRoutes: ["/", "/site", "/sign-in"],
   afterAuth(auth, req, evt) {
     const { pathname } = req.nextUrl;
 
-    // Redirect all users from the home page ("/") to "/page" regardless of authentication status
+    // Redirect all users from the home page ("/") to "/site" regardless of authentication status
     if (pathname === "/") {
-      return NextResponse.redirect(new URL("/page", req.url));
+      return NextResponse.redirect(new URL("/site", req.url));
     }
 
     // Redirect users attempting to access "/admin" without being signed in to "sign-in"
