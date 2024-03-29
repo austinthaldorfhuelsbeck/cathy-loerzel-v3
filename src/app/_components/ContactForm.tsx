@@ -6,26 +6,26 @@ import { z } from "zod";
 
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { Button } from "../../../components/ui/button";
-import { Calendar } from "../../../components/ui/calendar";
-import { Checkbox } from "../../../components/ui/checkbox";
+import { Button } from "../../components/ui/button";
+import { Calendar } from "../../components/ui/calendar";
+import { Checkbox } from "../../components/ui/checkbox";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "../../../components/ui/form";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
+} from "../../components/ui/form";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../../components/ui/popover";
-import { Textarea } from "../../../components/ui/textarea";
-import { toast } from "../../../components/ui/use-toast";
-import { cn } from "../../../lib/utils";
+} from "../../components/ui/popover";
+import { Textarea } from "../../components/ui/textarea";
+import { toast } from "../../components/ui/use-toast";
+import { cn } from "../../lib/utils";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
@@ -69,7 +69,7 @@ const ContactForm = () => {
         backgroundImage: `url("/images/Abstract-1.jpg")`,
       }}
     >
-      <h1 className="text-background/80 p-8 font-sans text-4xl font-bold uppercase md:text-5xl lg:text-6xl xl:text-7xl">
+      <h1 className="p-8 font-sans text-4xl font-bold uppercase text-background/80 md:text-5xl lg:text-6xl xl:text-7xl">
         Contact
       </h1>
       <Form {...form}>
@@ -77,7 +77,7 @@ const ContactForm = () => {
           className="mx-8 grid max-w-2xl grid-cols-1 gap-4 pb-10 md:mx-auto md:grid-cols-2"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <h2 className="text-primary font-sans text-2xl font-bold md:col-span-2">
+          <h2 className="font-sans text-2xl font-bold text-primary md:col-span-2">
             Reach out today.
           </h2>
 
@@ -237,7 +237,7 @@ const ContactForm = () => {
 
           <Button
             type="submit"
-            className="hover:bg-primary px-10 sm:mr-auto md:col-span-2"
+            className="px-10 hover:bg-primary sm:mr-auto md:col-span-2"
           >
             Let&#39;s talk!
           </Button>

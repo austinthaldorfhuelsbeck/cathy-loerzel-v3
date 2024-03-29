@@ -1,5 +1,5 @@
-import Navigation from "@/app/site/_components/Navigation";
-import Footer from "./_components/Footer";
+import Footer from "../_components/Footer";
+import Navigation from "../_components/Navigation";
 
 export default function SiteLayout({
   children,

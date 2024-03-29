@@ -5,9 +5,9 @@ export default authMiddleware({
   afterAuth(auth, req, evt) {
     const { pathname } = req.nextUrl;
 
-    // Redirect all users from the home page ("/") to "/site" regardless of authentication status
+    // Redirect all users from the home page ("/") to "/home" regardless of authentication status
     if (pathname === "/") {
-      return NextResponse.rewrite(new URL("/site", req.url));
+      return NextResponse.rewrite(new URL("/home", req.url));
     }
 
     // Redirect users attempting to access "/admin" without being signed in to "sign-in"
