@@ -1,3 +1,4 @@
+import SubscriptionForm from "@/components/SubscriptionForm";
 import Hero from "../_components/Hero";
 
 function HomePage() {
@@ -10,6 +11,8 @@ function HomePage() {
           Events
         </h2>
       </div>
+
+      <SubscriptionForm />
     </>
   );
 }
