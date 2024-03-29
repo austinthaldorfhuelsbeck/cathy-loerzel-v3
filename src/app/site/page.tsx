@@ -1,10 +1,16 @@
-import ContactForm from "@/components/ContactForm";
-import SubscriptionForm from "@/components/SubscriptionForm";
+import ContactForm from "@/app/site/_components/ContactForm";
+import SubscriptionForm from "@/app/site/_components/SubscriptionForm";
+import { Skeleton } from "@/components/ui/skeleton";
+import { api } from "@/trpc/server";
 import Image from "next/image";
 import Link from "next/link";
-import Hero from "../_components/Hero";
+import CategoryCards from "./_components/CategoryCards";
+import Hero from "./_components/Hero";
+import SubFooter from "./_components/SubFooter";
 
-function HomePage() {
+export default async function HomePage() {
+  const categories = await api.category.getEventCategories();
+
   return (
     <>
       <Hero />
@@ -13,6 +19,14 @@ function HomePage() {
         <h2 className="text-muted-foreground mx-5 font-sans font-bold uppercase md:mx-0">
           Events
         </h2>
+        {!categories && (
+          <div className="flex h-24 w-full gap-5 md:h-36">
+            <Skeleton className="w-36 md:w-72" />
+            <Skeleton className="w-36 md:w-72" />
+            <Skeleton className="w-36 md:w-72" />
+          </div>
+        )}
+        {categories && <CategoryCards categories={categories} />}
       </div>
 
       <SubscriptionForm />
@@ -29,8 +43,8 @@ function HomePage() {
           />
         </Link>
       </div>
+
+      <SubFooter />
     </>
   );
 }
-
-export default HomePage;

@@ -11,10 +11,86 @@ datasource db {
 }
 
 model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id          Int       @id @default(autoincrement())
+    name        String
+    slug        String    @unique
+    description String
+    content     String
+    published   Boolean
+    featured    Boolean
+    href        String
+    imageUrl    String?
+    audioUrl    String?
+    videoUrl    String?
+    categoryId  Int
+    category    Category  @relation(fields: [categoryId], references: [id])
+    tags        PostTag[]
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
 
-    @@index([name])
+    @@index([slug, categoryId])
+}
+
+model Event {
+    id          Int        @id @default(autoincrement())
+    name        String
+    slug        String     @unique
+    description String?
+    content     String?
+    published   Boolean
+    date        DateTime
+    location    String
+    categoryId  Int
+    category    Category   @relation(fields: [categoryId], references: [id])
+    tags        EventTag[]
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+}
+
+enum Type {
+    POST
+    EVENT
+}
+
+model Category {
+    id          Int      @id @default(autoincrement())
+    name        String
+    slug        String   @unique
+    subtitle    String?
+    description String?
+    type        Type
+    posts       Post[]
+    events      Event[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model Tag {
+    id          Int        @id @default(autoincrement())
+    name        String
+    description String?
+    color       String
+    slug        String     @unique
+    postTags    PostTag[]
+    eventTags   EventTag[]
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+}
+
+model PostTag {
+    postId Int
+    post   Post @relation(fields: [postId], references: [id])
+    tagId  Int
+    tag    Tag  @relation(fields: [tagId], references: [id])
+
+    @@id([postId, tagId])
+}
+
+model EventTag {
+    eventId Int
+    event   Event @relation(fields: [eventId], references: [id])
+    tagId   Int
+    tag     Tag   @relation(fields: [tagId], references: [id])
+
+    @@id([eventId, tagId])
 }
