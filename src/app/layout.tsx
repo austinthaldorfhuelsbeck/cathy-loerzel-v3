@@ -1,15 +1,10 @@
+import { cn } from "@/lib/utils";
+import { TRPCReactProvider } from "@/trpc/react";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Cormorant_Garamond } from "next/font/google";
+
 import "@/styles/globals.css";
 
-import { Cormorant_Garamond, Roboto } from "next/font/google";
-
-import { TRPCReactProvider } from "@/trpc/react";
-
-const roboto = Roboto({
-  weight: ["100", "300", "500", "700"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500", "700"],
   style: ["normal", "italic"],
@@ -32,9 +27,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans ${roboto.variable} font-serif ${cormorant.variable}`}
+        className={cn(
+          "bg-background min-h-screen font-serif antialiased",
+          cormorant.variable,
+        )}
       >
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <ClerkProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
