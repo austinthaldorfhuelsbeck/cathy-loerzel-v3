@@ -27,9 +27,9 @@ export function TagsSkeleton() {
 }
 
 export default async function SubFooter(props: { title?: string }) {
-  const featuredPost = await api.post.getFeatured();
+  const featuredPost = await api.posts.getFeatured();
   const postCategories = await api.category.getAllPostCategories();
-  const postTags = await api.tag.getAllPostTags();
+  const postTags = await api.tags.getAllPostTags();
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 lg:max-w-4xl">

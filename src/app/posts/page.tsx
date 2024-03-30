@@ -30,17 +30,17 @@ export default async function PostsPage({
   // Fetch posts
   let posts: Post[] | undefined = undefined;
   if (category) {
-    posts = await api.post.getByCategory({ category: category as string });
+    posts = await api.posts.getByCategory({ category: category as string });
   } else if (tag) {
-    posts = await api.post.getByTag({ tag: tag as string });
+    posts = await api.posts.getByTag({ tag: tag as string });
   } else {
-    posts = await api.post.getAll();
+    posts = await api.posts.getAll();
   }
   // Get featured
-  const featuredPost = await api.post.getFeatured();
+  const featuredPost = await api.posts.getFeatured();
 
   // Fetch post tags
-  const postTags = await api.tag.getAllPostTags();
+  const postTags = await api.tags.getAllPostTags();
   // Get current tag from params
   const postTag = postTags.find((postTag) => postTag.slug === tag);
 

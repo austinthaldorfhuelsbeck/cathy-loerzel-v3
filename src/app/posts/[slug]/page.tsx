@@ -1,4 +1,5 @@
 import CategoryCards from "@/app/_components/category-cards";
+import FeaturedPostBanner from "@/app/_components/featured-post-banner";
 import { CategoriesSkeleton } from "@/app/_components/sub-footer";
 import SubscriptionForm from "@/app/_components/subscription-form";
 import TagCards from "@/app/_components/tag-cards";
@@ -26,13 +27,18 @@ export default async function PostPage({
 
   // Fetch post categories and tags
   const postCategories = await api.category.getAllPostCategories();
-  const postTags = await api.tag.getAllPostTags();
+  const postTags = await api.tags.getAllPostTags();
 
   // Fetch post by slug
-  const post = await api.post.getBySlug({ slug: slug as string });
+  const post = await api.posts.getBySlug({ slug: slug as string });
 
   // Fetch related posts
-  const relatedPosts = await api.post.getRecommended({ postId: post?.id ?? 0 });
+  const relatedPosts = await api.posts.getRecommended({
+    postId: post?.id ?? 0,
+  });
+
+  // Fetch featured post
+  const featuredPost = await api.posts.getFeatured();
 
   return (
     <>
@@ -167,6 +173,9 @@ export default async function PostPage({
       ) : (
         <></>
       )}
+
+      {!featuredPost && <Skeleton className="h-96 w-full" />}
+      {featuredPost && <FeaturedPostBanner post={featuredPost} />}
 
       <TagCards tags={postTags} />
       <SubscriptionForm />
