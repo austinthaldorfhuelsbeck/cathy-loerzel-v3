@@ -158,12 +158,19 @@ export default async function PostPage({
                     alt={post.name}
                     width={1920}
                     height={1080}
-                    className="aspect-video object-cover"
+                    className="aspect-video rounded-t-lg border-b-8 border-primary object-cover"
+                    style={{
+                      borderColor: post.tags[0]?.color ?? "primary",
+                    }}
                   />
-                  <CardHeader>
-                    <CardTitle>{post.name}</CardTitle>
-                  </CardHeader>
                 </Link>
+                <CardHeader>
+                  <Link href={`/posts/${post.slug}`}>
+                    <CardTitle className="decoration-primary hover:underline">
+                      {post.name}
+                    </CardTitle>
+                  </Link>
+                </CardHeader>
               </Card>
             ))}
           </div>

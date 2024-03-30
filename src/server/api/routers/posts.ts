@@ -74,7 +74,7 @@ export const postRouter = createTRPCRouter({
 
       if (!posts) return [];
 
-      return posts.slice(0, 6);
+      return Promise.all(posts.slice(0, 6).map(addDataToPost));
     }),
 
   getByCategory: publicProcedure
