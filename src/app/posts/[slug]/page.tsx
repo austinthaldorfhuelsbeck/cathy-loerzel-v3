@@ -48,7 +48,7 @@ export default async function PostPage({
               </div>
 
               {/* Header content */}
-              <CardHeader className="p-3">
+              <CardHeader className="flex h-full flex-col justify-center p-3 pb-10">
                 <CardTitle className="text-4xl">{post.name}</CardTitle>
                 <time>
                   {post.createdAt.toLocaleDateString("en-US", {

@@ -22,6 +22,7 @@ export default async function PostsPage({
 
   // Fetch post categories
   const postCategories = await api.category.getAllPostCategories();
+  // Get current category from params
   const postCategory = postCategories.find(
     (postCategory) => postCategory.slug === category,
   );
@@ -35,11 +36,13 @@ export default async function PostsPage({
   } else {
     posts = await api.post.getAll();
   }
+  // Get featured
+  const featuredPost = await api.post.getFeatured();
 
   // Fetch post tags
   const postTags = await api.tag.getAllPostTags();
-
-  const featuredPost = posts.find((post) => post.featured);
+  // Get current tag from params
+  const postTag = postTags.find((postTag) => postTag.slug === tag);
 
   return (
     <>
@@ -48,10 +51,11 @@ export default async function PostsPage({
       {/* Header */}
       <header className="flex flex-col items-center justify-center gap-5">
         <h1 className="text-center text-3xl font-semibold text-muted-foreground">
-          All Posts
+          {postCategory?.name ?? postTag?.name ?? "All Posts"}
         </h1>
         <p className="text-center text-xl text-muted-foreground">
           {postCategory?.description ??
+            postTag?.description ??
             "The blog is a collection of stories, reflections, and resources that explore the intersection of faith, mental health, and culture."}
         </p>
         <Breadcrumb>
@@ -80,7 +84,7 @@ export default async function PostsPage({
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink href={`/posts?tag=${tag.toString()}`}>
-                    {postTags.find((t) => t.slug === tag)?.name}
+                    {postTag?.name}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               </>

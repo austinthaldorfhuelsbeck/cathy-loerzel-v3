@@ -7,18 +7,29 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { shorten } from "@/lib/utils";
-import { type Post } from "@prisma/client";
+import { type Category, type Post, type Tag } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import abstract from "../../../../public/images/Abstract-4.jpg";
 
-const PostCard = (props: { post: Post }) => {
+interface PostWithData extends Post {
+  category: Category;
+  tags: Tag[];
+}
+
+const PostCard = (props: { post: PostWithData }) => {
   const { post } = props;
 
   return (
     <Card key={post.id} className="border-muted">
       <CardHeader className="p-0">
-        <Link href={`/posts/${post.slug}`} className="hover:none">
+        <Link
+          href={`/posts/${post.slug}`}
+          className="hover:none border-b-8"
+          style={{
+            borderColor: post.tags[0]?.color ?? "primary",
+          }}
+        >
           <Image
             src={post.imageUrl ?? abstract}
             alt={post.name}
