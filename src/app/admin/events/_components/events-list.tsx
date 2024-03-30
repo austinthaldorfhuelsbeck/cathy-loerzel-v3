@@ -20,9 +20,12 @@ import { cn, shorten } from "@/lib/utils";
 import { type EventWithData } from "@/types";
 import { format } from "date-fns";
 import {
+  AlarmClockIcon,
   ArrowDownWideNarrowIcon,
   ArrowUpNarrowWideIcon,
   BookDashedIcon,
+  BookMarkedIcon,
+  HistoryIcon,
   ListFilterIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -78,33 +81,42 @@ function EventsListItem({ event }: { event: EventWithData }) {
 
 export default function EventsList({ events }: { events: EventWithData[] }) {
   const [filteredEvents, setFilteredEvents] = useState(events);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc" as const);
-  const [showUnpublished, setShowUnpublished] = useState(true);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc" as const);
+  const [showOnlyPublished, setShowOnlyPublished] = useState(false);
+  const [showOnlyUpcoming, setShowOnlyUpcoming] = useState(false);
 
   const onToggleSortOrder = () => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
   };
 
-  const onToggleShowUnpublished = () => {
-    setShowUnpublished((prevShowUnpublished) => !prevShowUnpublished);
+  const onToggleShowOnlyPublished = () => {
+    setShowOnlyPublished((prevShowOnlyUnpublished) => !prevShowOnlyUnpublished);
+  };
+
+  const onToggleShowOnlyUpcoming = () => {
+    setShowOnlyUpcoming((prevShowOnlyUpcoming) => !prevShowOnlyUpcoming);
   };
 
   useEffect(() => {
     const filtered = events.filter((event) => {
-      if (!showUnpublished && !event.published) return false;
+      if (
+        (showOnlyPublished && !event.published) ||
+        (showOnlyUpcoming && !(event.date >= new Date()))
+      )
+        return false;
       return true;
     });
 
     setFilteredEvents(
       filtered.sort((a, b) => {
         if (sortOrder === "asc") {
-          return a.date < b.date ? 1 : -1;
-        } else {
           return a.date > b.date ? 1 : -1;
+        } else {
+          return a.date < b.date ? 1 : -1;
         }
       }),
     );
-  }, [events, showUnpublished, sortOrder]);
+  }, [events, showOnlyPublished, showOnlyUpcoming, sortOrder]);
 
   return (
     <main>
@@ -123,16 +135,43 @@ export default function EventsList({ events }: { events: EventWithData[] }) {
           <TooltipProvider>
             <Tooltip>
               <Toggle
-                aria-label="Toggle sort order"
-                onClick={onToggleShowUnpublished}
+                aria-label="Toggle show only upcoming"
+                onClick={onToggleShowOnlyUpcoming}
                 className="hover:bg-primary/10"
               >
                 <TooltipTrigger asChild>
-                  <BookDashedIcon className="h-4 w-4" />
+                  {showOnlyUpcoming ? (
+                    <AlarmClockIcon className="h-4 w-4" />
+                  ) : (
+                    <HistoryIcon className="h-4 w-4" />
+                  )}
                 </TooltipTrigger>
               </Toggle>
               <TooltipContent>
-                {showUnpublished ? "Hide unpublished" : "Show unpublished"}
+                {!showOnlyUpcoming ? "Show only upcoming" : "Show past events"}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <Toggle
+                aria-label="Toggle show only published"
+                onClick={onToggleShowOnlyPublished}
+                className="hover:bg-primary/10"
+              >
+                <TooltipTrigger asChild>
+                  {showOnlyPublished ? (
+                    <BookMarkedIcon className="h-4 w-4" />
+                  ) : (
+                    <BookDashedIcon className="h-4 w-4" />
+                  )}
+                </TooltipTrigger>
+              </Toggle>
+              <TooltipContent>
+                {!showOnlyPublished
+                  ? "Show only published"
+                  : "Show unpublished"}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -141,12 +180,12 @@ export default function EventsList({ events }: { events: EventWithData[] }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="outline" onClick={onToggleSortOrder}>
-                  {sortOrder === "asc" && (
-                    <ArrowDownWideNarrowIcon className="h-4 w-4" />
-                  )}
-                  {sortOrder === "desc" && (
-                    <ArrowUpNarrowWideIcon className="h-4 w-4" />
-                  )}
+                  {
+                    {
+                      desc: <ArrowDownWideNarrowIcon className="h-4 w-4" />,
+                      asc: <ArrowUpNarrowWideIcon className="h-4 w-4" />,
+                    }[sortOrder]
+                  }
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
