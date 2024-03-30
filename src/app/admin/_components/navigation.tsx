@@ -14,11 +14,11 @@ import Link from "next/link";
 export default function Navigation() {
   return (
     <header className="sticky top-0 z-10 flex flex-col bg-white text-muted-foreground shadow">
-      <nav className="flex items-center justify-center gap-3 p-3">
+      <nav className="flex items-center justify-center gap-3 p-3 font-sans">
         <aside className="flex w-full items-center gap-3 rounded-lg border-2 pr-3">
           <Input
             placeholder="Search..."
-            className="rounded-r-none border-none"
+            className="rounded-r-none border-none text-sm"
           />
           <SearchIcon size={24} />
         </aside>

@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Toggle } from "@/components/ui/toggle";
 import {
   Tooltip,
@@ -84,6 +85,7 @@ export default function EventsList({ events }: { events: EventWithData[] }) {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc" as const);
   const [showOnlyPublished, setShowOnlyPublished] = useState(false);
   const [showOnlyUpcoming, setShowOnlyUpcoming] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const onToggleSortOrder = () => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
@@ -101,7 +103,12 @@ export default function EventsList({ events }: { events: EventWithData[] }) {
     const filtered = events.filter((event) => {
       if (
         (showOnlyPublished && !event.published) ||
-        (showOnlyUpcoming && !(event.date >= new Date()))
+        (showOnlyUpcoming && !(event.date >= new Date())) ||
+        (searchQuery &&
+          !(
+            event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            event.description.toLowerCase().includes(searchQuery.toLowerCase())
+          ))
       )
         return false;
       return true;
@@ -116,22 +123,32 @@ export default function EventsList({ events }: { events: EventWithData[] }) {
         }
       }),
     );
-  }, [events, showOnlyPublished, showOnlyUpcoming, sortOrder]);
+  }, [events, showOnlyPublished, showOnlyUpcoming, sortOrder, searchQuery]);
 
   return (
     <main>
       <Card className="mb-5 flex w-full items-center justify-between gap-3 px-2 py-1">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline">
-                <ListFilterIcon className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Filter events</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <aside className="space-x-1">
+        <aside className="flex gap-1">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline">
+                  <ListFilterIcon className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Filter events</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <Input
+            placeholder="Search event titles and descriptions"
+            className="w-48 text-sm sm:w-64 md:w-80 lg:w-96 xl:w-96 2xl:w-96"
+            aria-label="Search events"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </aside>
+
+        <aside className="flex gap-1">
           <TooltipProvider>
             <Tooltip>
               <Toggle
