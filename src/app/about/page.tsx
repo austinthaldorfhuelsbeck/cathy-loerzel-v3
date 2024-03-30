@@ -109,7 +109,7 @@ export default function AboutPage() {
         </ContentBlock>
 
         <Card
-          style={{ backgroundImage: `url("/images/Abstract-3.jpg")` }}
+          style={{ backgroundImage: `url("/images/Abstract-2.jpg")` }}
           className="m-5 max-w-3xl bg-cover bg-center p-5 text-muted-foreground md:mx-auto"
         >
           <CardContent className="flex flex-col gap-5">

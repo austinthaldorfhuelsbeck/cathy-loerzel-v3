@@ -1,4 +1,4 @@
-import { Card, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
 import { type EventWithData } from "@/types";
@@ -18,7 +18,7 @@ export default async function IntensivesPage() {
       <div className="bg-gradient-to-b from-card/25 to-background">
         <ContentBlock title="Story Work Intensives">
           <Image
-            src="/images/walking-with-animals.jpg"
+            src="/images/retreat-conversation.jpeg"
             alt="Serene illustration of a young woman walking through a snowy forest with a deer, bobcat, fox, sparrows, and owl."
             width={400}
             height={400}
@@ -52,8 +52,11 @@ export default async function IntensivesPage() {
           </p>
         </ContentBlock>
 
-        <ContentBlock>
-          <div className="flex flex-col gap-2 p-5 md:col-span-2">
+        <Card
+          style={{ backgroundImage: `url("/images/Abstract-4.jpg")` }}
+          className="m-5 max-w-3xl bg-cover bg-center p-5 text-muted-foreground md:mx-auto"
+        >
+          <CardContent className="flex flex-col gap-5">
             <p>
               Each life can be understood and healed - we just have to be brave
               enough to listen to what our bodies know but our minds are
@@ -68,7 +71,6 @@ export default async function IntensivesPage() {
               of origin and its link to where you are struggling to find
               freedom, joy and connection in the present.
             </p>
-
             <p>
               <Link
                 className="underline hover:text-primary hover:decoration-primary"
@@ -77,16 +79,9 @@ export default async function IntensivesPage() {
                 Reach out today
               </Link>
               .
-            </p>
-          </div>
-          <Image
-            src="/images/sunset-lake.jpeg"
-            alt="Sunset over a lake"
-            width={400}
-            height={400}
-            className="mt-5 h-full max-h-[400px] rounded-full border border-primary object-cover object-right shadow-lg"
-          />
-        </ContentBlock>
+            </p>{" "}
+          </CardContent>
+        </Card>
 
         <ContentBlock title="Group Intensives">
           <Image

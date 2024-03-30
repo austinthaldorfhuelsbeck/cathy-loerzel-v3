@@ -27,7 +27,7 @@ const CategoryCards = (props: { categories: (Category | undefined)[] }) => (
                     ? `/posts?category=${category.slug}`
                     : `/events?category=${category.slug}`
                 }
-                className="block h-full rounded-sm bg-secondary/20 px-8 py-6 text-lg text-primary-foreground transition-all ease-in-out hover:bg-secondary/65 hover:underline"
+                className="block h-full rounded-sm bg-secondary/20 px-4 py-2 text-lg text-primary-foreground transition-all ease-in-out hover:bg-secondary/65 hover:underline sm:px-8 sm:py-6"
               >
                 <h3 className="text-xl">{category.name}</h3>
                 <p className="hidden text-sm italic md:inline-block">

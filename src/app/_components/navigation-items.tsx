@@ -1,4 +1,5 @@
 "use client";
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -49,7 +50,7 @@ const NavigationItems = (props: {
   const { items } = props;
   return (
     <NavigationMenu className="mx-auto">
-      <NavigationMenuList className="space-x-3">
+      <NavigationMenuList className="flex gap-3">
         {items.map((item, index) => (
           <NavigationMenuItem key={index}>
             <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
@@ -68,7 +69,8 @@ const NavigationItems = (props: {
             </NavigationMenuContent>
           </NavigationMenuItem>
         ))}
-        <NavigationMenuItem className="hidden md:inline-block">
+
+        <NavigationMenuItem className="hidden lg:inline-block">
           <NavigationMenuLink
             href="/about"
             className={cn(navigationMenuTriggerStyle(), "text-lg")}
