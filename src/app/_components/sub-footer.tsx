@@ -4,7 +4,7 @@ import CategoryCards from "./category-cards";
 import FeaturedPostBanner from "./featured-post-banner";
 import TagCards from "./tag-cards";
 
-function CategoriesSkeleton() {
+export function CategoriesSkeleton() {
   return (
     <div className="flex h-24 w-full gap-5 md:h-36">
       <Skeleton className="w-36 md:w-72" />
@@ -14,7 +14,7 @@ function CategoriesSkeleton() {
   );
 }
 
-function TagsSkeleton() {
+export function TagsSkeleton() {
   return (
     <div className="flex w-full items-center justify-center gap-5 md:h-36">
       <Skeleton className="h-24 w-24 rounded-full lg:h-32 lg:w-32" />

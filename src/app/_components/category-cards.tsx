@@ -10,7 +10,7 @@ const imagePaths = [
 
 const CategoryCards = (props: { categories: (Category | undefined)[] }) => (
   <section>
-    <div className="mx-5 grid grid-cols-2 justify-center gap-5 sm:flex md:mx-0">
+    <div className="mx-5 flex justify-center gap-5 md:mx-0">
       {props.categories.map(
         (category, idx) =>
           category && (
@@ -27,7 +27,7 @@ const CategoryCards = (props: { categories: (Category | undefined)[] }) => (
                     ? `/posts?category=${category.slug}`
                     : `/events?category=${category.slug}`
                 }
-                className="text-primary-foreground bg-secondary/20 hover:bg-secondary/65 block h-full rounded-sm p-8 text-lg transition-all ease-in-out hover:underline"
+                className="block h-full rounded-sm bg-secondary/20 px-8 py-6 text-lg text-primary-foreground transition-all ease-in-out hover:bg-secondary/65 hover:underline"
               >
                 <h3 className="text-xl">{category.name}</h3>
                 <p className="hidden text-sm italic md:inline-block">
