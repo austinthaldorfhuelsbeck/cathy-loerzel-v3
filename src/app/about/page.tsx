@@ -14,9 +14,9 @@ export default function AboutPage() {
           <Image
             src="/images/cathy-farm.jpg"
             alt="Cathy Loerzel"
-            width={200}
-            height={200}
-            className="rounded-full border border-primary shadow-lg"
+            width={400}
+            height={400}
+            className="mt-5 h-full max-h-[400px] rounded-full border border-primary object-cover object-right shadow-lg"
           />
           <div className="flex flex-col gap-2 p-5 md:col-span-2">
             <strong>I&#39;m Cathy.</strong>
@@ -109,7 +109,7 @@ export default function AboutPage() {
         </ContentBlock>
 
         <Card
-          style={{ backgroundImage: `url("/images/Abstract-3")` }}
+          style={{ backgroundImage: `url("/images/Abstract-3.jpg")` }}
           className="m-5 max-w-3xl bg-cover bg-center p-5 text-muted-foreground md:mx-auto"
         >
           <CardContent className="flex flex-col gap-5">

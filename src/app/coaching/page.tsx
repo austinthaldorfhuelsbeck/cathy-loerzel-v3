@@ -1,3 +1,4 @@
+import { Card, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
 import { type EventWithData } from "@/types";
@@ -14,7 +15,7 @@ export default async function CoachingPage() {
 
   return (
     <>
-      <div className="bg-gradient-to-b from-accent/25 to-background">
+      <div className="bg-gradient-to-b from-accent/35 to-background">
         <ContentBlock title="Story Work Coaching">
           <Image
             src="/images/walking-with-animals.jpg"
@@ -41,8 +42,7 @@ export default async function CoachingPage() {
               >
                 Contact Cathy
               </Link>{" "}
-              to set up a 25 min consultation to see if this path is right for
-              you.
+              to set up a consultation to see if this path is right for you.
             </p>
             <p>
               <em>Sliding scale pricing is available if needed.</em>
@@ -89,6 +89,23 @@ export default async function CoachingPage() {
           />
         </ContentBlock>
       </div>
+
+      <Card
+        style={{
+          backgroundImage: `url("/images/retreat-conversation.jpeg")`,
+        }}
+        className="mx-5 aspect-video rounded-lg bg-cover bg-center shadow-lg backdrop-blur-sm 2xl:mx-auto 2xl:w-[1500px]"
+      >
+        <Link
+          href="/#contact"
+          className="flex h-full w-full flex-col items-center justify-center rounded-lg bg-accent/40 px-5 text-primary-foreground decoration-white backdrop-blur-sm transition-all ease-in-out hover:bg-accent/75 hover:underline hover:backdrop-blur-md"
+        >
+          <CardTitle className="font-sans font-bold uppercase">
+            <p className="font-sans uppercase text-white">Don&#39;t wait.</p>
+            <p className="text-4xl">Reach out today.</p>
+          </CardTitle>
+        </Link>
+      </Card>
 
       {upcomingEvents ? (
         <div className="mx-auto max-w-2xl lg:max-w-4xl">
