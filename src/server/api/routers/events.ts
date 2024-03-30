@@ -27,6 +27,18 @@ async function addDataToEvent(event: Event) {
 }
 
 export const eventRouter = createTRPCRouter({
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const events = await ctx.db.event.findMany({
+      orderBy: {
+        date: "desc",
+      },
+    });
+
+    if (!events) return [];
+
+    return Promise.all(events.map(addDataToEvent));
+  }),
+
   getUpcomingPublished: publicProcedure.query(async ({ ctx }) => {
     const events = await ctx.db.event.findMany({
       where: {

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
+import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -59,12 +60,7 @@ export default async function EventPage({
               <CardHeader className="flex h-full flex-col justify-center p-3 pb-10">
                 <CardTitle>{event.name}</CardTitle>
                 <p className="text-muted-foreground">
-                  {event.date.toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}{" "}
-                  • {event.location}
+                  {format(event.date, "PPP")} • {event.location}
                 </p>
               </CardHeader>
             </div>

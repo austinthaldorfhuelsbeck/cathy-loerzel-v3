@@ -23,29 +23,28 @@ export default function Navigation() {
           <SearchIcon size={24} />
         </aside>
 
-        <SignOutButton>
-          <TooltipProvider>
-            <Tooltip>
+        <TooltipProvider>
+          <Tooltip>
+            <SignOutButton>
               <TooltipTrigger asChild>
                 <Button variant="ghost" className="px-2">
                   <LogOutIcon size={24} />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Sign out</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </SignOutButton>
+            </SignOutButton>
+            <TooltipContent>Sign out</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </nav>
 
       <nav className="bg-secondary font-sans text-sm font-semibold tracking-wide text-secondary-foreground">
         <ul className="flex items-center">
           {adminNavigationItems.map((item, index) => (
-            <li
-              className="px-4 py-2 hover:bg-primary hover:underline"
-              key={index}
-            >
-              <Link href={item.href}>{item.title}</Link>
-            </li>
+            <Link href={item.href} key={index}>
+              <li className="px-4 py-2 hover:bg-primary hover:underline">
+                {item.title}
+              </li>
+            </Link>
           ))}
         </ul>
       </nav>

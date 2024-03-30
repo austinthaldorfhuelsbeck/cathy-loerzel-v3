@@ -15,6 +15,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { timeToRead } from "@/lib/utils";
 import { api } from "@/trpc/server";
+import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -69,13 +70,7 @@ export default async function PostPage({
               {/* Header content */}
               <CardHeader className="flex h-full flex-col justify-center p-3 pb-10">
                 <CardTitle className="text-4xl">{post.name}</CardTitle>
-                <time>
-                  {post.createdAt.toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
+                <time>{format(post.createdAt, "PPP")}</time>
                 <p className="font-bold">
                   {post.category?.slug === "writing" &&
                     `Reading Time: ${timeToRead(post.content)} min`}

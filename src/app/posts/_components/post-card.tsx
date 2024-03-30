@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { shorten } from "@/lib/utils";
 import { type PostWithData } from "@/types";
+import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -36,13 +37,7 @@ function PostCard({ post }: { post: PostWithData }) {
           <Link href={`/posts/${post.slug}`}>{post.name}</Link>
         </CardTitle>
         <CardDescription className="text-sm text-muted-foreground">
-          <time>
-            {post.createdAt.toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </time>
+          <time>{format(post.createdAt, "PPP")}</time>
         </CardDescription>
         {post.description && (
           <p className="text-muted-foreground">

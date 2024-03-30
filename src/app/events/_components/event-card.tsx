@@ -1,6 +1,7 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { shorten } from "@/lib/utils";
 import { type EventWithData } from "@/types";
+import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -31,12 +32,7 @@ export default function EventCard({ event }: { event: EventWithData }) {
         </Link>
 
         <p>
-          {event.date.toLocaleDateString("en-US", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+          {format(event.date, "PPPP")}
           {" | "}
           {event.location}
         </p>
