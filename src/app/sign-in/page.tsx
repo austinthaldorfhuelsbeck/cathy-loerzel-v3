@@ -18,7 +18,7 @@ export default function Page() {
           footerAction: "hidden",
         },
       }}
-      afterSignInUrl="/site"
+      afterSignInUrl="/admin"
       signUpUrl="/sign-up"
     />
   );

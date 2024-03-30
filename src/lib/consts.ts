@@ -35,3 +35,26 @@ export const testimonials = [
     title: "Author of Wild at Heart",
   },
 ];
+
+export const adminNavigationItems = [
+  {
+    title: "Dashboard",
+    href: "/admin",
+  },
+  {
+    title: "Events",
+    href: "/admin/events",
+  },
+  {
+    title: "Posts",
+    href: "/admin/posts",
+  },
+  {
+    title: "Categories",
+    href: "/admin/categories",
+  },
+  {
+    title: "Tags",
+    href: "/admin/tags",
+  },
+];
