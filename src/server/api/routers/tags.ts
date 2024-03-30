@@ -12,8 +12,12 @@ export const tagRouter = createTRPCRouter({
           },
         },
       },
+      orderBy: {
+        name: "asc",
+      },
     });
   }),
+
   getAllPostTags: publicProcedure.query(({ ctx }) => {
     return ctx.db.tag.findMany({
       where: {
@@ -24,6 +28,9 @@ export const tagRouter = createTRPCRouter({
             },
           },
         },
+      },
+      orderBy: {
+        name: "asc",
       },
     });
   }),

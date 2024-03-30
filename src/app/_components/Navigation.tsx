@@ -5,8 +5,8 @@ import NavigationItems from "./navigation-items";
 
 export default async function Navigation() {
   // Fetch all categories
-  const postCategories = await api.category.getAllPostCategories();
-  const eventCategories = await api.category.getAllEventCategories();
+  const postCategories = await api.categories.getAllPostCategories();
+  const eventCategories = await api.categories.getAllEventCategories();
 
   // Construct navigation items
   const postItems: { title: string; href: string; description?: string }[] =
@@ -22,13 +22,13 @@ export default async function Navigation() {
       description: category.subtitle ?? undefined,
     }));
   const items = [
-    { title: "Story Work", items: eventItems },
+    { title: "Events", items: eventItems },
     { title: "Resources", items: postItems },
   ];
 
   return (
-    <div className="sticky top-0 z-10 flex flex-col justify-center bg-white p-4 shadow sm:flex-row">
-      <aside className="flex justify-between">
+    <div className="sticky top-0 z-10 flex flex-col items-center justify-center gap-5 bg-white p-4 shadow sm:flex-row">
+      <aside>
         <Link href="/">
           <Image
             src={"/logo.png"}

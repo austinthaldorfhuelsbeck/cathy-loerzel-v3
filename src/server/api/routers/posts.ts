@@ -67,13 +67,14 @@ export const postRouter = createTRPCRouter({
             id: post.id,
           },
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
-
-      console.log(posts);
 
       if (!posts) return [];
 
-      return posts;
+      return posts.slice(0, 6);
     }),
 
   getByCategory: publicProcedure

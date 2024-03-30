@@ -7,15 +7,23 @@ export const categoryRouter = createTRPCRouter({
       where: {
         type: "EVENT",
       },
+      orderBy: {
+        name: "asc",
+      },
     });
   }),
+
   getAllPostCategories: publicProcedure.query(({ ctx }) => {
     return ctx.db.category.findMany({
       where: {
         type: "POST",
       },
+      orderBy: {
+        name: "asc",
+      },
     });
   }),
+
   getCategoryBySlug: publicProcedure
     .input(z.object({ slug: z.string() }))
     .query(({ ctx, input }) => {

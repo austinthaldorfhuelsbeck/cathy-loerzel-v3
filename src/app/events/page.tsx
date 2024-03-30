@@ -5,44 +5,13 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
+import { type EventWithData } from "@/types";
 import type { Event } from "@prisma/client";
-import Link from "next/link";
 import CategoryCards from "../_components/category-cards";
 import TagCards from "../_components/tag-cards";
-
-function EventCard({ event }: { event: Event }) {
-  return (
-    <Link href={`/events/${event.slug}`} passHref>
-      <Card>
-        <CardHeader>
-          <CardTitle>{event.name}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{event.description}</p>
-        </CardContent>
-        <CardFooter>
-          <p>
-            {event.date.toLocaleDateString("en-US", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-        </CardFooter>
-      </Card>
-    </Link>
-  );
-}
+import EventCard from "./_components/event-card";
 
 export default async function EventsPage({
   searchParams,
@@ -52,7 +21,7 @@ export default async function EventsPage({
   const { category, tag } = searchParams;
 
   // Fetch event categories
-  const eventCategories = await api.category.getAllEventCategories();
+  const eventCategories = await api.categories.getAllEventCategories();
   // Get current category from params
   const eventCategory = eventCategories.find(
     (eventCategory) => eventCategory.slug === category,
@@ -61,11 +30,13 @@ export default async function EventsPage({
   // Fetch events
   let events: Event[] | undefined = undefined;
   if (category) {
-    events = await api.events.getByCategory({ category: category as string });
+    events = await api.events.getUpcomingPublishedByCategory({
+      category: category as string,
+    });
   } else if (tag) {
-    events = await api.events.getByTag({ tag: tag as string });
+    events = await api.events.getUpcomingPublishedByTag({ tag: tag as string });
   } else {
-    events = await api.events.getAll();
+    events = await api.events.getUpcomingPublished();
   }
 
   // Fetch event tags
@@ -85,7 +56,7 @@ export default async function EventsPage({
         <p className="text-center text-xl text-muted-foreground">
           {eventCategory?.description ??
             eventTag?.description ??
-            "Check out our upcoming events!"}
+            "Catch Cathy at a speaking engagement near you, join a virtual event, or attend an intensive or retreat."}
         </p>
         {/* Breadcrumb */}
         <Breadcrumb>
@@ -124,13 +95,16 @@ export default async function EventsPage({
       </header>
 
       {/* Events */}
-      <section className="mx-auto grid grid-cols-1 gap-6 px-4 py-8 sm:grid-cols-2 md:px-6 lg:grid-cols-3 lg:px-8">
+      <section className="flex flex-col gap-5">
         {events ? (
-          events.map((event) => <EventCard key={event.id} event={event} />)
+          events.map((event) => (
+            <EventCard key={event.id} event={event as EventWithData} />
+          ))
         ) : (
           <Skeleton className="h-96 w-full" />
         )}
       </section>
+
       {/* Tags */}
       <TagCards tags={eventTags} />
     </>

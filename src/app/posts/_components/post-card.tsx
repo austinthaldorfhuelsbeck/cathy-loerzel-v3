@@ -11,9 +11,7 @@ import { type PostWithData } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
-const PostCard = (props: { post: PostWithData }) => {
-  const { post } = props;
-
+function PostCard({ post }: { post: PostWithData }) {
   return (
     <Card key={post.id} className="border-muted">
       <CardHeader className="p-0">
@@ -34,7 +32,7 @@ const PostCard = (props: { post: PostWithData }) => {
         </Link>
       </CardHeader>
       <CardContent className="mt-5 flex flex-col gap-3">
-        <CardTitle className="text-lg font-semibold text-primary underline">
+        <CardTitle className="text-xl font-semibold text-primary underline">
           <Link href={`/posts/${post.slug}`}>{post.name}</Link>
         </CardTitle>
         <CardDescription className="text-sm text-muted-foreground">

@@ -10,6 +10,7 @@ const config = {
     domains: [
       "firebasestorage.googleapis.com",
       "cathy-loerzel-img.s3.us-west-2.amazonaws.com",
+      "scontent.cdninstagram.com",
     ],
   },
 };

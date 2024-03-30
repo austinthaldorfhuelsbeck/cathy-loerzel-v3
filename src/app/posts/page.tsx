@@ -22,7 +22,7 @@ export default async function PostsPage({
   const { category, tag } = searchParams;
 
   // Fetch post categories
-  const postCategories = await api.category.getAllPostCategories();
+  const postCategories = await api.categories.getAllPostCategories();
   // Get current category from params
   const postCategory = postCategories.find(
     (postCategory) => postCategory.slug === category,

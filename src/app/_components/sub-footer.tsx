@@ -28,7 +28,7 @@ export function TagsSkeleton() {
 
 export default async function SubFooter(props: { title?: string }) {
   const featuredPost = await api.posts.getFeatured();
-  const postCategories = await api.category.getAllPostCategories();
+  const postCategories = await api.categories.getAllPostCategories();
   const postTags = await api.tags.getAllPostTags();
 
   return (

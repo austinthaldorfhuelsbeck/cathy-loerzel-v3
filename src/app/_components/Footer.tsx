@@ -9,8 +9,8 @@ const discoverLinks = [
 ];
 
 export default async function Footer() {
-  const postCategories = await api.category.getAllPostCategories();
-  const eventCategories = await api.category.getAllEventCategories();
+  const postCategories = await api.categories.getAllPostCategories();
+  const eventCategories = await api.categories.getAllEventCategories();
   const postCategoryLinks = postCategories.map((category) => ({
     name: category.name,
     href: `/posts?category=${category.slug}`,

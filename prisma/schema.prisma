@@ -14,7 +14,7 @@ model Post {
     id          Int       @id @default(autoincrement())
     name        String
     slug        String    @unique
-    description String
+    description String    @db.Text
     content     String    @db.Text
     published   Boolean
     featured    Boolean
@@ -35,11 +35,12 @@ model Event {
     id          Int        @id @default(autoincrement())
     name        String
     slug        String     @unique
-    description String?
+    description String     @db.Text
     content     String?
     published   Boolean
     date        DateTime
     location    String
+    imageUrl    String?
     categoryId  Int
     category    Category   @relation(fields: [categoryId], references: [id])
     tags        EventTag[]

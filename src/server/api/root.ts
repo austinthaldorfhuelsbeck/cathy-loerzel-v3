@@ -12,7 +12,7 @@ import { tagRouter } from "./routers/tags";
 export const appRouter = createTRPCRouter({
   posts: postRouter,
   events: eventRouter,
-  category: categoryRouter,
+  categories: categoryRouter,
   tags: tagRouter,
 });
 

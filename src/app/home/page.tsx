@@ -1,24 +1,43 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
+import { type EventWithData } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import CategoryCards from "../_components/category-cards";
 import ContactForm from "../_components/contact-form";
 import SubFooter from "../_components/sub-footer";
 import SubscriptionForm from "../_components/subscription-form";
+import EventCard from "../events/_components/event-card";
 import Hero from "./_components/Hero";
 
 export default async function HomePage() {
-  const categories = await api.category.getAllEventCategories();
+  const upcomingEvents = await api.events.getUpcomingPublished();
+  const categories = await api.categories.getAllEventCategories();
 
   return (
     <>
       <Hero />
 
+      <SubscriptionForm />
+
+      {upcomingEvents ? (
+        <div className="mx-auto max-w-2xl lg:max-w-4xl">
+          {upcomingEvents.length !== 0 && (
+            <section className="flex flex-col gap-5">
+              <h2 className="mx-5 font-sans font-bold uppercase text-muted-foreground md:mx-0">
+                Upcoming
+              </h2>
+              {upcomingEvents.map((event) => (
+                <EventCard key={event.id} event={event as EventWithData} />
+              ))}
+            </section>
+          )}
+        </div>
+      ) : (
+        <Skeleton className="h-96 w-full" />
+      )}
+
       <div className="mx-auto max-w-2xl lg:max-w-4xl">
-        <h2 className="mx-5 font-sans font-bold uppercase text-muted-foreground md:mx-0">
-          Events
-        </h2>
         {!categories && (
           <div className="flex h-24 w-full gap-5 md:h-36">
             <Skeleton className="w-36 md:w-72" />
@@ -28,8 +47,6 @@ export default async function HomePage() {
         )}
         {categories && <CategoryCards categories={categories} />}
       </div>
-
-      <SubscriptionForm />
 
       <div id="contact">
         <ContactForm />
