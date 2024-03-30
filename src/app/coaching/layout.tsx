@@ -1,7 +1,7 @@
 import Footer from "../_components/footer";
 import Navigation from "../_components/navigation";
 
-export default function AboutLayout({
+export default function CoachingLayout({
   children,
 }: {
   children: React.ReactNode;
