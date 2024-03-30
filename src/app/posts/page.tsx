@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
+import { type PostWithData } from "@/types";
 import { type Post } from "@prisma/client";
 import CategoryCards from "../_components/category-cards";
 import FeaturedPostBanner from "../_components/featured-post-banner";
@@ -108,7 +109,9 @@ export default async function PostsPage({
             <Skeleton className="aspect-video w-full rounded-t-lg object-cover sm:aspect-square" />
           </>
         )}
-        {posts?.map((post) => <PostCard key={post.id} post={post} />)}
+        {posts?.map((post) => (
+          <PostCard key={post.id} post={post as PostWithData} />
+        ))}
       </section>
 
       {featuredPost && <FeaturedPostBanner post={featuredPost} />}

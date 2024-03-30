@@ -7,15 +7,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { shorten } from "@/lib/utils";
-import { type Category, type Post, type Tag } from "@prisma/client";
+import { type PostWithData } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import abstract from "../../../../public/images/Abstract-4.jpg";
-
-interface PostWithData extends Post {
-  category: Category;
-  tags: Tag[];
-}
 
 const PostCard = (props: { post: PostWithData }) => {
   const { post } = props;
@@ -31,7 +25,7 @@ const PostCard = (props: { post: PostWithData }) => {
           }}
         >
           <Image
-            src={post.imageUrl ?? abstract}
+            src={post.imageUrl ?? "/public/images/Abstract-4.jpg"}
             alt={post.name}
             width={300}
             height={200}

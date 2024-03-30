@@ -15,7 +15,7 @@ model Post {
     name        String
     slug        String    @unique
     description String
-    content     String
+    content     String    @db.Text
     published   Boolean
     featured    Boolean
     href        String

@@ -1,17 +1,33 @@
-"use client";
-
-import { MenuIcon, XIcon } from "lucide-react";
+import { api } from "@/trpc/server";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { Button } from "../../components/ui/button";
+import NavigationItems from "./navigation-items";
 
-export default function Navigation() {
-  const [isDisplayed, setIsDisplayed] = useState(false);
-  // const { eventCategories, postCategories } = props;
+export default async function Navigation() {
+  // Fetch all categories
+  const postCategories = await api.category.getAllPostCategories();
+  const eventCategories = await api.category.getAllEventCategories();
+
+  // Construct navigation items
+  const postItems: { title: string; href: string; description?: string }[] =
+    postCategories.map((category) => ({
+      title: category.name,
+      href: `/posts?category=${category.slug}`,
+      description: category.subtitle ?? undefined,
+    }));
+  const eventItems: { title: string; href: string; description?: string }[] =
+    eventCategories.map((category) => ({
+      title: category.name,
+      href: `/events?category=${category.slug}`,
+      description: category.subtitle ?? undefined,
+    }));
+  const items = [
+    { title: "Story Work", items: eventItems },
+    { title: "Resources", items: postItems },
+  ];
 
   return (
-    <div className="sticky top-0 z-10 flex flex-col justify-start bg-white p-4 shadow sm:flex-row">
+    <div className="sticky top-0 z-10 flex flex-col justify-center bg-white p-4 shadow sm:flex-row">
       <aside className="flex justify-between">
         <Link href="/">
           <Image
@@ -22,43 +38,8 @@ export default function Navigation() {
             priority
           />
         </Link>
-        <Button
-          variant="outline"
-          className="inline-block sm:hidden"
-          onClick={() => setIsDisplayed(!isDisplayed)}
-        >
-          {isDisplayed ? (
-            <XIcon className="h-6 w-6" />
-          ) : (
-            <MenuIcon className="h-6 w-6" />
-          )}
-        </Button>
       </aside>
-
-      {/* <NavigationMenu
-        className={cn(
-          isDisplayed ? "inline-block" : "hidden sm:inline-block",
-          "sm:ml-auto",
-        )}
-      >
-        <NavigationMenuList>
-          <NavigationMenuItem className="hidden lg:inline-block">
-            <Link href="/redeeming-heartache">
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Redeeming Heartache
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <Link href="/contact">
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Contact
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu> */}
+      <NavigationItems items={items} />
     </div>
   );
 }

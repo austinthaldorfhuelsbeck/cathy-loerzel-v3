@@ -1,3 +1,14 @@
+export const navigationItems = [
+  {
+    title: "Home",
+    href: "/",
+  },
+  {
+    title: "Contact",
+    href: "/contact",
+  },
+];
+
 export const testimonials = [
   {
     quote:

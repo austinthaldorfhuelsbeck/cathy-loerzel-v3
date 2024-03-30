@@ -153,18 +153,16 @@ export default async function PostPage({
             {relatedPosts?.map((post) => (
               <Card key={post.id}>
                 <Link href={`/posts/${post.slug}`}>
-                  <a>
-                    <Image
-                      src={post.imageUrl ?? "/images/headshot-banner.jpg"}
-                      alt={post.name}
-                      width={1920}
-                      height={1080}
-                      className="aspect-video object-cover"
-                    />
-                    <CardHeader>
-                      <CardTitle>{post.name}</CardTitle>
-                    </CardHeader>
-                  </a>
+                  <Image
+                    src={post.imageUrl ?? "/images/headshot-banner.jpg"}
+                    alt={post.name}
+                    width={1920}
+                    height={1080}
+                    className="aspect-video object-cover"
+                  />
+                  <CardHeader>
+                    <CardTitle>{post.name}</CardTitle>
+                  </CardHeader>
                 </Link>
               </Card>
             ))}
