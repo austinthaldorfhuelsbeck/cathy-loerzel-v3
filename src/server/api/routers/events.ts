@@ -94,4 +94,18 @@ export const eventRouter = createTRPCRouter({
 
       return Promise.all(events.map(addDataToEvent));
     }),
+
+  getBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const event = await ctx.db.event.findUnique({
+        where: {
+          slug: input.slug,
+        },
+      });
+
+      if (!event) return null;
+
+      return addDataToEvent(event);
+    }),
 });

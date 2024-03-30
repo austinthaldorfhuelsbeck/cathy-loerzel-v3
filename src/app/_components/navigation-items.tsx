@@ -68,7 +68,7 @@ const NavigationItems = (props: {
             </NavigationMenuContent>
           </NavigationMenuItem>
         ))}
-        <NavigationMenuItem>
+        <NavigationMenuItem className="hidden md:inline-block">
           <NavigationMenuLink
             href="/about"
             className={cn(navigationMenuTriggerStyle(), "text-lg")}
@@ -76,7 +76,7 @@ const NavigationItems = (props: {
             About
           </NavigationMenuLink>
         </NavigationMenuItem>
-        <NavigationMenuItem>
+        <NavigationMenuItem className="hidden md:inline-block">
           <NavigationMenuLink
             href="/#contact"
             className={cn(navigationMenuTriggerStyle(), "text-lg")}

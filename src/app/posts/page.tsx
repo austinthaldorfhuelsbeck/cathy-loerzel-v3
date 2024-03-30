@@ -116,7 +116,7 @@ export default async function PostsPage({
 
       {featuredPost && <FeaturedPostBanner post={featuredPost} />}
 
-      <TagCards tags={postTags} />
+      <TagCards tags={postTags} type="post" />
     </>
   );
 }

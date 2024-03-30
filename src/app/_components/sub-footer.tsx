@@ -44,7 +44,7 @@ export default async function SubFooter(props: { title?: string }) {
       <h2 className="px-5 text-2xl font-semibold text-muted-foreground sm:px-0">
         Topics
       </h2>
-      <TagCards tags={postTags} />
+      <TagCards tags={postTags} type="post" />
     </div>
   );
 }

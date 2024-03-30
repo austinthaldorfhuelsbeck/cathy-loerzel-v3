@@ -1,4 +1,4 @@
-export default function PostLayout({
+export default function EventLayout({
   children,
 }: {
   children: React.ReactNode;

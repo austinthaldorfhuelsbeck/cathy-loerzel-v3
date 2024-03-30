@@ -15,7 +15,7 @@ export default function EventCard({ event }: { event: EventWithData }) {
         }}
       >
         <Image
-          src={event.imageUrl ?? "/public/images/Abstract-4.jpg"}
+          src={event.imageUrl ?? "/images/Abstract-4.jpg"}
           alt={event.name}
           width={300}
           height={200}

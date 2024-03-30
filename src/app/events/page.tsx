@@ -106,7 +106,7 @@ export default async function EventsPage({
       </section>
 
       {/* Tags */}
-      <TagCards tags={eventTags} />
+      <TagCards tags={eventTags} type="event" />
     </>
   );
 }

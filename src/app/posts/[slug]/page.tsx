@@ -138,7 +138,7 @@ export default async function PostPage({
       )}
 
       <div className="border-none bg-background shadow-none">
-        {post && (
+        {post?.content && (
           <div
             className="prose max-w-none"
             dangerouslySetInnerHTML={{ __html: post.content }}
@@ -175,7 +175,7 @@ export default async function PostPage({
       {!featuredPost && <Skeleton className="h-96 w-full" />}
       {featuredPost && <FeaturedPostBanner post={featuredPost} />}
 
-      <TagCards tags={postTags} />
+      <TagCards tags={postTags} type="post" />
       <SubscriptionForm />
     </>
   );

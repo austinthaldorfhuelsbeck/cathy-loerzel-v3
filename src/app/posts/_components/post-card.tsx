@@ -23,7 +23,7 @@ function PostCard({ post }: { post: PostWithData }) {
           }}
         >
           <Image
-            src={post.imageUrl ?? "/public/images/Abstract-4.jpg"}
+            src={post.imageUrl ?? "/images/Abstract-4.jpg"}
             alt={post.name}
             width={300}
             height={200}
