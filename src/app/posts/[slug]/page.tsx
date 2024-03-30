@@ -1,5 +1,7 @@
 import CategoryCards from "@/app/_components/category-cards";
 import { CategoriesSkeleton } from "@/app/_components/sub-footer";
+import SubscriptionForm from "@/app/_components/subscription-form";
+import TagCards from "@/app/_components/tag-cards";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,11 +24,15 @@ export default async function PostPage({
 }) {
   const { slug } = params;
 
-  // Fetch post categories
+  // Fetch post categories and tags
   const postCategories = await api.category.getAllPostCategories();
+  const postTags = await api.tag.getAllPostTags();
 
   // Fetch post by slug
   const post = await api.post.getBySlug({ slug: slug as string });
+
+  // Fetch related posts
+  const relatedPosts = await api.post.getRecommended({ postId: post?.id ?? 0 });
 
   return (
     <>
@@ -115,6 +121,16 @@ export default async function PostPage({
         </Breadcrumb>
       </header>
 
+      {post?.audioUrl && (
+        <div>
+          <audio
+            src={post.audioUrl}
+            controls
+            className="h-16 w-full bg-background"
+          />
+        </div>
+      )}
+
       <div className="border-none bg-background shadow-none">
         {post && (
           <div
@@ -123,6 +139,37 @@ export default async function PostPage({
           />
         )}
       </div>
+
+      {relatedPosts?.length ? (
+        <section className="flex flex-col gap-4 p-4">
+          <h2 className="text-3xl">Related Posts</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {relatedPosts?.map((post) => (
+              <Card key={post.id}>
+                <Link href={`/posts/${post.slug}`}>
+                  <a>
+                    <Image
+                      src={post.imageUrl ?? "/images/headshot-banner.jpg"}
+                      alt={post.name}
+                      width={1920}
+                      height={1080}
+                      className="aspect-video object-cover"
+                    />
+                    <CardHeader>
+                      <CardTitle>{post.name}</CardTitle>
+                    </CardHeader>
+                  </a>
+                </Link>
+              </Card>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <></>
+      )}
+
+      <TagCards tags={postTags} />
+      <SubscriptionForm />
     </>
   );
 }

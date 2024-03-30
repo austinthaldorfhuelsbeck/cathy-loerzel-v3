@@ -35,6 +35,47 @@ export const postRouter = createTRPCRouter({
     return Promise.all(posts.map(addDataToPost));
   }),
 
+  getRecommended: publicProcedure
+    .input(z.object({ postId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const post = await ctx.db.post.findUnique({
+        where: {
+          id: input.postId,
+        },
+      });
+
+      if (!post) return [];
+
+      const postWithData = await addDataToPost(post);
+
+      const posts = await ctx.db.post.findMany({
+        where: {
+          OR: [
+            { id: postWithData.categoryId },
+            {
+              tags: {
+                some: {
+                  tagId: {
+                    in: postWithData.tags.map((tag) => tag.id),
+                  },
+                },
+              },
+            },
+          ],
+
+          NOT: {
+            id: post.id,
+          },
+        },
+      });
+
+      console.log(posts);
+
+      if (!posts) return [];
+
+      return posts;
+    }),
+
   getByCategory: publicProcedure
     .input(z.object({ category: z.string() }))
     .query(async ({ ctx, input }) => {
