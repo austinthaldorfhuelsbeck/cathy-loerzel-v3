@@ -15,7 +15,7 @@ export default async function IntensivesPage() {
 
   return (
     <>
-      <div className="bg-gradient-to-b from-card to-background">
+      <div className="bg-gradient-to-b from-card/25 to-background">
         <ContentBlock title="Story Work Intensives">
           <Image
             src="/images/walking-with-animals.jpg"
