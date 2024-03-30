@@ -1,7 +1,14 @@
 import CategoryCards from "@/app/_components/category-cards";
 import { CategoriesSkeleton } from "@/app/_components/sub-footer";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { timeToRead } from "@/lib/utils";
 import { api } from "@/trpc/server";
@@ -33,7 +40,7 @@ export default async function PostPage({
           <Card className="flex flex-col rounded-none border-0 border-b-8 bg-background shadow-none md:flex-row">
             <div className="flex-1">
               {/* Tag Links */}
-              <div className="flex">
+              <div className="flex gap-3">
                 {post.tags.map((tag) => (
                   <Link href={`/posts?tag=${tag.slug}`} key={tag.id}>
                     <Button
@@ -65,7 +72,7 @@ export default async function PostPage({
             </div>
 
             {/* Image */}
-            <div className="flex-1">
+            <Link href={post.href ?? "#"} className="flex-1">
               <Image
                 src={post.imageUrl ?? "/images/headshot-banner.jpg"}
                 alt={post.name}
@@ -73,14 +80,49 @@ export default async function PostPage({
                 height={1080}
                 className="my-2 aspect-video border-primary object-cover object-right-top md:rounded-r md:border-l-4"
               />
-            </div>
+            </Link>
           </Card>
         )}
+
+        <Breadcrumb className="mx-auto text-center">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/posts`}>Posts</BreadcrumbLink>
+            </BreadcrumbItem>
+            {post?.category && (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    href={`/posts?category=${post.category.slug}`}
+                  >
+                    {post.category.name}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            )}
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#">
+                {post?.name ?? "This post"}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
       </header>
 
-      <CardContent>
-        <pre>{JSON.stringify(post, null, 2)}</pre>
-      </CardContent>
+      <div className="border-none bg-background shadow-none">
+        {post && (
+          <div
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+        )}
+      </div>
     </>
   );
 }
