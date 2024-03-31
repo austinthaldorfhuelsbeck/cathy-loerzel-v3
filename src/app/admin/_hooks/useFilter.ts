@@ -6,6 +6,7 @@ export function useFilter(items?: (PostWithData | EventWithData)[]) {
   // State
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [showOnlyPublished, setShowOnlyPublished] = useState(false);
+  const [showOnlyUpcoming, setShowOnlyUpcoming] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null,
@@ -21,6 +22,10 @@ export function useFilter(items?: (PostWithData | EventWithData)[]) {
     setShowOnlyPublished((prev) => !prev);
   }, []);
 
+  const onToggleShowOnlyUpcoming = useCallback(() => {
+    setShowOnlyUpcoming((prev) => !prev);
+  }, []);
+
   const onCategorySelect = useCallback((category: Category) => {
     setSelectedCategory(category);
   }, []);
@@ -31,6 +36,7 @@ export function useFilter(items?: (PostWithData | EventWithData)[]) {
     setSearchQuery("");
     setSortOrder("desc");
     setShowOnlyPublished(false);
+    setShowOnlyUpcoming(false);
   }, []);
 
   // Filtering and Sorting Logic
@@ -38,6 +44,9 @@ export function useFilter(items?: (PostWithData | EventWithData)[]) {
     let tempItems = items ?? [];
     if (showOnlyPublished) {
       tempItems = tempItems.filter((item) => item.published);
+    }
+    if (showOnlyUpcoming) {
+      tempItems = tempItems.filter((item) => item.date.getTime() > Date.now());
     }
     if (selectedCategory) {
       tempItems = tempItems.filter(
@@ -70,6 +79,7 @@ export function useFilter(items?: (PostWithData | EventWithData)[]) {
   }, [
     items,
     showOnlyPublished,
+    showOnlyUpcoming,
     selectedCategory,
     selectedTag,
     searchQuery,
@@ -88,6 +98,8 @@ export function useFilter(items?: (PostWithData | EventWithData)[]) {
     onToggleSortOrder,
     showOnlyPublished,
     onToggleShowOnlyPublished,
+    showOnlyUpcoming,
+    onToggleShowOnlyUpcoming,
     onClearFilters,
   };
 }

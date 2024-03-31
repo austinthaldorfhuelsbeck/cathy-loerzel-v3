@@ -6,9 +6,11 @@ import { Input } from "@/components/ui/input";
 import { FilterDropdown } from "./filter-dropdown";
 import { FilterResetButton } from "./filter-reset-button";
 import { OnlyPublishedButton } from "./only-published-button";
+import { OnlyUpcomingButton } from "./only-upcoming-button";
 import { SortOrderButton } from "./sort-order-button";
 
 export function DashboardFilter(props: {
+  type: "post" | "event";
   categories: Category[];
   tags: Tag[];
   filterProvider: ReturnType<typeof useFilter>;
@@ -36,6 +38,9 @@ export function DashboardFilter(props: {
       </aside>
 
       <aside className="flex gap-1">
+        {props.type === "event" && (
+          <OnlyUpcomingButton filterProvider={filterProvider} />
+        )}
         <OnlyPublishedButton filterProvider={filterProvider} />
         <SortOrderButton filterProvider={filterProvider} />
       </aside>

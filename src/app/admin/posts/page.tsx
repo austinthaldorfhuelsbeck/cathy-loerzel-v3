@@ -35,6 +35,7 @@ export default function AdminPostsPage() {
       {posts && postCategories && postTags && (
         <section className="flex flex-col">
           <DashboardFilter
+            type="post"
             categories={postCategories}
             tags={postTags}
             filterProvider={filterProvider}
