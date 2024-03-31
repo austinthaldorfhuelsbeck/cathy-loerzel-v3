@@ -5,6 +5,16 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormField,
@@ -71,6 +81,19 @@ export function CategoryForm({ category }: { category?: Category }) {
     onError: (error) => {
       toast({
         title: "Error updating category",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+  const deleteCategoryMutation = api.categories.delete.useMutation({
+    onSuccess: () => {
+      form.reset();
+      router.push("/admin/categories");
+    },
+    onError: (error) => {
+      toast({
+        title: "Error deleting category",
         description: error.message,
         variant: "destructive",
       });
@@ -182,9 +205,48 @@ export function CategoryForm({ category }: { category?: Category }) {
             )}
           />
         </div>
-        <Button type="submit" className="mr-auto">
-          Save
-        </Button>
+        <div className="flex items-center justify-between sm:col-span-2 lg:col-span-3">
+          <Button type="submit">Save</Button>
+
+          <Button
+            variant="outline"
+            onClick={() => router.back()}
+            className="ml-2 mr-auto"
+          >
+            Cancel
+          </Button>
+
+          {category && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="destructive">Delete</Button>
+              </DialogTrigger>
+
+              <DialogContent className="font-sans">
+                <DialogHeader>
+                  <DialogTitle>Are you sure?</DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    the category.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    variant="destructive"
+                    onClick={() =>
+                      deleteCategoryMutation.mutate({ id: category.id })
+                    }
+                  >
+                    Delete
+                  </Button>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          )}
+        </div>
       </form>
     </Form>
   );

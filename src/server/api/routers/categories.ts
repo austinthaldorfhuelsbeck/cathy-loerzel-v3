@@ -68,4 +68,14 @@ export const categoryRouter = createTRPCRouter({
         data: input,
       });
     }),
+
+  delete: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.category.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });
