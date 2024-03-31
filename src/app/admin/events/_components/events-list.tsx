@@ -109,10 +109,10 @@ export default function EventsList({
   const [showOnlyPublished, setShowOnlyPublished] = useState(false);
   const [showOnlyUpcoming, setShowOnlyUpcoming] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null,
   );
-  const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
+  const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
 
   const onToggleSortOrder = () => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
@@ -127,7 +127,7 @@ export default function EventsList({
   };
 
   const onCategorySelect = (category: Category) => {
-    setSelectedCategoryId(category.id);
+    setSelectedCategory(category);
   };
 
   useEffect(() => {
@@ -141,15 +141,15 @@ export default function EventsList({
       filtered = filtered.filter((event) => event.date >= new Date());
     }
 
-    if (selectedCategoryId) {
+    if (selectedCategory) {
       filtered = filtered.filter(
-        (event) => event.category?.id === selectedCategoryId,
+        (event) => event.category?.id === selectedCategory?.id,
       );
     }
 
-    if (selectedTagId) {
+    if (selectedTag) {
       filtered = filtered.filter((event) =>
-        event.tags.some((tag) => tag.id === selectedTagId),
+        event.tags.some((tag) => tag.id === selectedTag?.id),
       );
     }
 
@@ -161,25 +161,32 @@ export default function EventsList({
       );
     }
 
-    if (sortOrder === "desc") {
-      filtered = filtered.sort((a, b) => a.date.getTime() - b.date.getTime());
-    } else {
-      filtered = filtered.sort((a, b) => b.date.getTime() - a.date.getTime());
-    }
-
     setFilteredEvents(filtered);
   }, [
     events,
     searchQuery,
-    selectedCategoryId,
-    selectedTagId,
+    selectedCategory,
+    selectedTag,
     showOnlyPublished,
     showOnlyUpcoming,
-    sortOrder,
   ]);
 
+  useEffect(() => {
+    setFilteredEvents((prevEvents) => {
+      const sortedEvents = [...prevEvents].sort((a, b) => {
+        if (sortOrder === "asc") {
+          return a.date.getTime() - b.date.getTime();
+        } else {
+          return b.date.getTime() - a.date.getTime();
+        }
+      });
+
+      return sortedEvents;
+    });
+  }, [sortOrder]);
+
   return (
-    <main>
+    <main className="flex flex-col gap-3">
       <Card className="mb-5 flex w-full items-center justify-between gap-3 px-2 py-1">
         <aside className="flex items-center gap-1">
           <TooltipProvider>
@@ -207,7 +214,7 @@ export default function EventsList({
                           key={category.id}
                           onClick={() => onCategorySelect(category)}
                           className={cn(
-                            selectedCategoryId === category.id
+                            selectedCategory === category
                               ? "bg-accent text-accent-foreground"
                               : "",
                             "flex items-center justify-between",
@@ -216,7 +223,7 @@ export default function EventsList({
                           {category.name}
                           <CheckCircleIcon
                             className={cn(
-                              selectedCategoryId == category.id ? "" : "hidden",
+                              selectedCategory === category ? "" : "hidden",
                               "h-3 w-3 text-accent-foreground",
                             )}
                           />
@@ -235,9 +242,9 @@ export default function EventsList({
                       {tags.map((tag) => (
                         <DropdownMenuItem
                           key={tag.id}
-                          onClick={() => setSelectedTagId(tag.id)}
+                          onClick={() => setSelectedTag(tag)}
                           className={cn(
-                            selectedTagId === tag.id
+                            selectedTag === tag
                               ? "bg-accent text-accent-foreground"
                               : "",
                             "flex items-center justify-between",
@@ -246,7 +253,7 @@ export default function EventsList({
                           {tag.name}
                           <CheckCircleIcon
                             className={cn(
-                              selectedTagId == tag.id ? "" : "hidden",
+                              selectedTag == tag ? "" : "hidden",
                               "h-3 w-3 text-accent-foreground",
                             )}
                           />
@@ -267,15 +274,15 @@ export default function EventsList({
             onChange={(e) => setSearchQuery(e.target.value)}
           />
 
-          {(selectedCategoryId ?? selectedTagId ?? searchQuery) && (
+          {(selectedCategory ?? selectedTag ?? searchQuery) && (
             <TooltipProvider>
               <Tooltip>
                 <Toggle
                   aria-label="Clear filters"
                   className="hover:bg-primary/10"
                   onClick={() => {
-                    setSelectedCategoryId(null);
-                    setSelectedTagId(null);
+                    setSelectedCategory(null);
+                    setSelectedTag(null);
                     setSearchQuery("");
                   }}
                 >
@@ -353,6 +360,19 @@ export default function EventsList({
           </TooltipProvider>
         </aside>
       </Card>
+
+      {selectedCategory && (
+        <Badge className="mr-auto">{`Showing events in category: ${selectedCategory.name}`}</Badge>
+      )}
+
+      {selectedTag && (
+        <Badge
+          className="mr-auto"
+          style={{
+            backgroundColor: selectedTag.color,
+          }}
+        >{`Showing events with tag: ${selectedTag.name}`}</Badge>
+      )}
 
       <ul className="flex grid-cols-2 flex-col gap-5 sm:grid md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {filteredEvents.map((event) => (
