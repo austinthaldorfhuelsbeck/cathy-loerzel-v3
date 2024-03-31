@@ -135,4 +135,70 @@ export const eventRouter = createTRPCRouter({
 
       return addDataToEvent(event);
     }),
+
+  getById: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const event = await ctx.db.event.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!event) return null;
+
+      return event;
+    }),
+
+  create: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        slug: z.string(),
+        date: z.date(),
+        location: z.string(),
+        categoryId: z.number(),
+        description: z.string().optional(),
+        imageUrl: z.string().optional(),
+        published: z.boolean(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.event.create({
+        data: input,
+      });
+    }),
+
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        slug: z.string(),
+        date: z.date(),
+        location: z.string(),
+        categoryId: z.number(),
+        description: z.string().optional(),
+        imageUrl: z.string().optional(),
+        published: z.boolean(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.event.update({
+        where: {
+          id: input.id,
+        },
+        data: input,
+      });
+    }),
+
+  delete: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.event.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });

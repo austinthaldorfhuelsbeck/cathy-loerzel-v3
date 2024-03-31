@@ -5,27 +5,27 @@ import { api } from "@/trpc/react";
 import { useUser } from "@clerk/nextjs";
 import { BackToAll } from "../../_components/back-to-all";
 import DashboardPageHeader from "../../_components/dashboard-page-header";
-import { CategoryForm } from "../_components/category-form";
+import { EventForm } from "../_components/event-form";
 
-export default function EditCategoryPage({
+export default function EditEventPage({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   const { isLoaded: clerkUserIsLoaded } = useUser();
 
-  // Fetch category by id
-  const categoryQuery = api.categories.getById.useQuery({
+  // Fetch event by id
+  const eventQuery = api.events.getById.useQuery({
     id: Number(searchParams.id as string),
   });
-  const category = categoryQuery.data;
+  const event = eventQuery.data;
 
   if (!clerkUserIsLoaded) return <LoadingPage />;
   return (
     <div className="space-y-5">
-      <DashboardPageHeader type="category" title="Edit Category" />
-      <BackToAll type="category" />
-      {category && <CategoryForm category={category} />}
+      <DashboardPageHeader type="event" title="Edit Event" />
+      <BackToAll type="event" />
+      {event && <EventForm event={event} />}
     </div>
   );
 }
