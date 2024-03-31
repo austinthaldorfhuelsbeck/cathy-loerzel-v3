@@ -13,11 +13,7 @@ import { type EventWithData, type PostWithData } from "@/types";
 import { format } from "date-fns";
 import Link from "next/link";
 
-export default function ListItem({
-  listItem,
-}: {
-  listItem: EventWithData | PostWithData;
-}) {
+function ListItem({ listItem }: { listItem: EventWithData | PostWithData }) {
   // Build class names for card background color
   let cardBgColor = "bg-primary/30";
   if (!listItem.published) cardBgColor = "bg-card/50";
@@ -31,7 +27,6 @@ export default function ListItem({
             <Link href={`/admin/events/${listItem.id}`}>
               {listItem.name}
               {!listItem.published && " (unpublished)"}
-              {listItem.date < new Date() && " (past)"}
             </Link>
           </CardTitle>
           <time className="font-serif text-sm font-semibold text-muted-foreground">
@@ -62,5 +57,19 @@ export default function ListItem({
         </CardFooter>
       </Card>
     </li>
+  );
+}
+
+export default function DashboardGrid({
+  items,
+}: {
+  items: (EventWithData | PostWithData)[];
+}) {
+  return (
+    <ul className="flex grid-cols-2 flex-col gap-5 sm:grid md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      {items.map((item) => (
+        <ListItem key={item.id} listItem={item} />
+      ))}
+    </ul>
   );
 }

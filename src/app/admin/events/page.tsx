@@ -7,7 +7,7 @@ import { api } from "@/trpc/react";
 import { type EventWithData } from "@/types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import EventsListItem from "../_components/list-item";
+import EventsListItem from "../_components/dashboard-grid";
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
