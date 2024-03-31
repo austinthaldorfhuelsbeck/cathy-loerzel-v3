@@ -14,6 +14,7 @@ model Post {
     id          Int       @id @default(autoincrement())
     name        String
     slug        String    @unique
+    date        DateTime  @default(now())
     description String    @db.Text
     content     String    @db.Text
     published   Boolean

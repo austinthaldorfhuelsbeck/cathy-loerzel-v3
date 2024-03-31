@@ -4,10 +4,10 @@ import { useUser } from "@clerk/nextjs";
 import { LoadingPage } from "@/app/_components/loading";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
-import { type EventWithData } from "@/types";
+import { type PostWithData } from "@/types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import EventsListItem from "../_components/list-item";
+import ListItem from "../_components/list-item";
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -32,41 +32,38 @@ import {
 import { cn } from "@/lib/utils";
 import { type Category, type Tag } from "@prisma/client";
 import {
-  AlarmClockIcon,
   ArrowDownWideNarrowIcon,
   ArrowUpNarrowWideIcon,
   BetweenHorizontalStartIcon,
   BookDashedIcon,
   BookMarkedIcon,
   CheckCircleIcon,
-  HistoryIcon,
   ListFilterIcon,
   TagIcon,
   XCircleIcon,
 } from "lucide-react";
 
-export default function AdminEventsPage() {
+export default function AdminPostsPage() {
   const { isLoaded: clerkUserIsLoaded } = useUser();
 
-  const [filteredEvents, setFilteredEvents] = useState<EventWithData[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<PostWithData[]>([]);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc" as const);
   const [showOnlyPublished, setShowOnlyPublished] = useState(false);
-  const [showOnlyUpcoming, setShowOnlyUpcoming] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null,
   );
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
 
-  // Fetch all events
-  const eventsQuery = api.events.getAll.useQuery();
-  const events = eventsQuery.data;
+  // Fetch all posts
+  const postsQuery = api.posts.getAll.useQuery();
+  const posts = postsQuery.data;
 
-  // Fetch all eventCategories and eventTags
-  const eventCategoriesQuery = api.categories.getAllEventCategories.useQuery();
-  const eventCategories = eventCategoriesQuery.data;
-  const eventTagsQuery = api.tags.getAllEventTags.useQuery();
-  const eventTags = eventTagsQuery.data;
+  // Fetch all postCategories and postTags
+  const postCategoriesQuery = api.categories.getAllPostCategories.useQuery();
+  const postCategories = postCategoriesQuery.data;
+  const postTagsQuery = api.tags.getAllPostTags.useQuery();
+  const postTags = postTagsQuery.data;
 
   // Handlers
   const onToggleSortOrder = () => {
@@ -77,31 +74,27 @@ export default function AdminEventsPage() {
     setShowOnlyPublished((prevShowOnlyUnpublished) => !prevShowOnlyUnpublished);
   };
 
-  const onToggleShowOnlyUpcoming = () => {
-    setShowOnlyUpcoming((prevShowOnlyUpcoming) => !prevShowOnlyUpcoming);
-  };
-
   const onCategorySelect = (category: Category) => {
     setSelectedCategory(category);
   };
 
   useEffect(() => {
-    if (events && eventCategories && eventTags) {
-      setFilteredEvents(events);
+    if (posts && postCategories && postTags) {
+      setFilteredPosts(posts as PostWithData[]);
     }
-  }, [events, eventCategories, eventTags]);
+  }, [posts, postCategories, postTags]);
 
   if (!clerkUserIsLoaded) return <LoadingPage />;
   return (
     <>
       <header className="flex justify-between">
-        <h1 className="text-2xl font-bold">Events</h1>
-        <Link href="/admin/events/new">
-          <Button>Create Event</Button>
+        <h1 className="text-2xl font-bold">Posts</h1>
+        <Link href="/admin/posts/new">
+          <Button>Create Post</Button>
         </Link>
       </header>
 
-      {events && eventCategories && eventTags && (
+      {posts && postCategories && postTags && (
         <section className="flex flex-col">
           <Card className="mb-5 flex w-full items-center justify-between gap-3 px-2 py-1">
             <aside className="flex items-center gap-1">
@@ -115,7 +108,7 @@ export default function AdminEventsPage() {
                         </Button>
                       </TooltipTrigger>
                     </DropdownMenuTrigger>
-                    <TooltipContent>Filter events</TooltipContent>
+                    <TooltipContent>Filter posts</TooltipContent>
                   </Tooltip>
                   <DropdownMenuContent>
                     <DropdownMenuSub>
@@ -125,7 +118,7 @@ export default function AdminEventsPage() {
                       </DropdownMenuSubTrigger>
                       <DropdownMenuPortal>
                         <DropdownMenuSubContent>
-                          {eventCategories.map((category) => (
+                          {postCategories.map((category) => (
                             <DropdownMenuItem
                               key={category.id}
                               onClick={() => onCategorySelect(category)}
@@ -155,7 +148,7 @@ export default function AdminEventsPage() {
                       </DropdownMenuSubTrigger>
                       <DropdownMenuPortal>
                         <DropdownMenuSubContent>
-                          {eventTags.map((tag) => (
+                          {postTags.map((tag) => (
                             <DropdownMenuItem
                               key={tag.id}
                               onClick={() => setSelectedTag(tag)}
@@ -183,9 +176,9 @@ export default function AdminEventsPage() {
               </TooltipProvider>
 
               <Input
-                placeholder="Search event titles and descriptions"
+                placeholder="Search post titles and descriptions"
                 className="w-48 text-sm sm:w-64 md:w-80 lg:w-96 xl:w-96 2xl:w-96"
-                aria-label="Search events"
+                aria-label="Search posts"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -213,29 +206,6 @@ export default function AdminEventsPage() {
             </aside>
 
             <aside className="flex gap-1">
-              <TooltipProvider>
-                <Tooltip>
-                  <Toggle
-                    aria-label="Toggle show only upcoming"
-                    onClick={onToggleShowOnlyUpcoming}
-                    className="hover:bg-primary/10"
-                  >
-                    <TooltipTrigger asChild>
-                      {showOnlyUpcoming ? (
-                        <AlarmClockIcon className="h-4 w-4" />
-                      ) : (
-                        <HistoryIcon className="h-4 w-4" />
-                      )}
-                    </TooltipTrigger>
-                  </Toggle>
-                  <TooltipContent>
-                    {!showOnlyUpcoming
-                      ? "Show only upcoming"
-                      : "Show past events"}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
               <TooltipProvider>
                 <Tooltip>
                   <Toggle
@@ -281,23 +251,23 @@ export default function AdminEventsPage() {
 
           <div className="flex gap-2">
             {selectedCategory && (
-              <Badge>{`Showing events in category: ${selectedCategory.name}`}</Badge>
+              <Badge>{`Showing posts in category: ${selectedCategory.name}`}</Badge>
             )}
             {selectedTag && (
               <Badge
                 style={{
                   backgroundColor: selectedTag.color,
                 }}
-              >{`Showing events with tag: ${selectedTag.name}`}</Badge>
+              >{`Showing posts with tag: ${selectedTag.name}`}</Badge>
             )}
           </div>
         </section>
       )}
 
-      {events && eventCategories && eventTags && (
+      {posts && postCategories && postTags && (
         <ul className="flex grid-cols-2 flex-col gap-5 sm:grid md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-          {filteredEvents.map((event) => (
-            <EventsListItem listItem={event} key={event.id} />
+          {filteredPosts.map((post) => (
+            <ListItem listItem={post} key={post.id} />
           ))}
         </ul>
       )}
