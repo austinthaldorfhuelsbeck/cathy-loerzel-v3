@@ -13,11 +13,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { convertToSlug } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { type Tag } from "@prisma/client";
+import { type Category } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -25,65 +32,67 @@ import { useForm } from "react-hook-form";
 const formSchema = z.object({
   name: z
     .string()
-    .min(1, { message: "Tag name is required" })
-    .max(64, { message: "Tag name is too long" }),
+    .min(1, { message: "Category name is required" })
+    .max(64, { message: "Category name is too long" }),
   slug: z
     .string()
     .min(1, { message: "Slug is required" })
     .max(64, { message: "Slug is too long" })
     .regex(/^[a-z0-9-]+$/, { message: "Slug must be lowercase with dashes" }),
-  color: z.string().length(7, { message: "Invalid hex code" }),
+  type: z.enum(["EVENT", "POST"]),
+  subtitle: z.string().max(64, { message: "Subtitle is too long" }).optional(),
   description: z
     .string()
     .max(255, { message: "Description is too long" })
     .optional(),
 });
 
-export function TagForm({ tag }: { tag?: Tag }) {
+export function CategoryForm({ category }: { category?: Category }) {
   const { toast } = useToast();
   const router = useRouter();
-  const createTagMutation = api.tags.create.useMutation({
+  const createCategoryMutation = api.categories.create.useMutation({
     onSuccess: () => {
       form.reset();
-      router.push("/admin/tags");
+      router.push("/admin/categories");
     },
     onError: (error) => {
       toast({
-        title: "Error creating tag",
+        title: "Error creating category",
         description: error.message,
         variant: "destructive",
       });
     },
   });
-  const updateTagMutation = api.tags.update.useMutation({
+  const updateCategoryMutation = api.categories.update.useMutation({
     onSuccess: () => {
       form.reset();
-      router.push("/admin/tags");
+      router.push("/admin/categories");
     },
     onError: (error) => {
       toast({
-        title: "Error updating tag",
+        title: "Error updating category",
         description: error.message,
         variant: "destructive",
       });
     },
   });
 
-  // Initialize form with tag data if editing
+  // Initialize form with category data
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: tag?.name ?? "",
-      slug: tag?.slug ?? "",
-      color: tag?.color ?? "#BC796C",
-      description: tag?.description ?? "",
+      name: category?.name ?? "",
+      slug: category?.slug ?? "",
+      type: category?.type ?? "POST",
+      subtitle: category?.subtitle ?? "",
+      description: category?.description ?? "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    tag
-      ? updateTagMutation.mutate({ ...values, id: tag.id })
-      : createTagMutation.mutate({ ...values });
+    category
+      ? updateCategoryMutation.mutate({ id: category.id, ...values })
+      : createCategoryMutation.mutate(values);
   }
 
   // Automatically fill in slug based on name
@@ -103,9 +112,9 @@ export function TagForm({ tag }: { tag?: Tag }) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tag name</FormLabel>
+              <FormLabel>Category name</FormLabel>
               <FormControl>
-                <Input placeholder="Leadership" {...field} />
+                <Input placeholder="Category name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -118,7 +127,7 @@ export function TagForm({ tag }: { tag?: Tag }) {
             <FormItem>
               <FormLabel>Slug</FormLabel>
               <FormControl>
-                <Input placeholder="leadership" {...field} />
+                <Input placeholder="Category slug" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -126,12 +135,33 @@ export function TagForm({ tag }: { tag?: Tag }) {
         />
         <FormField
           control={form.control}
-          name="color"
+          name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Color</FormLabel>
+              <FormLabel>Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Category type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="POST">Post</SelectItem>
+                  <SelectItem value="EVENT">Event</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="subtitle"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Subtitle</FormLabel>
               <FormControl>
-                <Input placeholder="#BC796C" type="color" {...field} />
+                <Input placeholder="Category subtitle" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -145,10 +175,7 @@ export function TagForm({ tag }: { tag?: Tag }) {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="A tag for leadership content"
-                    {...field}
-                  />
+                  <Textarea placeholder="Category description" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

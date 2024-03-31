@@ -5,27 +5,27 @@ import { api } from "@/trpc/react";
 import { useUser } from "@clerk/nextjs";
 import { BackToAll } from "../../_components/back-to-all";
 import DashboardPageHeader from "../../_components/dashboard-page-header";
-import { TagForm } from "../_components/tag-form";
+import { CategoryForm } from "../_components/categories-form";
 
-export default function EditTagPage({
+export default function EditCategoryPage({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   const { isLoaded: clerkUserIsLoaded } = useUser();
 
-  // Fetch tag by id
-  const tagQuery = api.tags.getById.useQuery({
+  // Fetch category by id
+  const categoryQuery = api.categories.getById.useQuery({
     id: Number(searchParams.id as string),
   });
-  const tag = tagQuery.data;
+  const category = categoryQuery.data;
 
   if (!clerkUserIsLoaded) return <LoadingPage />;
   return (
     <div className="space-y-5">
-      <DashboardPageHeader type="tag" title="Edit Tag" />
-      <BackToAll type="tag" />
-      {tag && <TagForm tag={tag} />}
+      <DashboardPageHeader type="category" title="Edit Category" />
+      <BackToAll type="category" />
+      {category && <CategoryForm category={category} />}
     </div>
   );
 }
