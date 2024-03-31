@@ -9,6 +9,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Toggle } from "@/components/ui/toggle";
 import {
@@ -19,15 +29,20 @@ import {
 } from "@/components/ui/tooltip";
 import { cn, shorten } from "@/lib/utils";
 import { type EventWithData } from "@/types";
+import { type Category, type Tag } from "@prisma/client";
 import { format } from "date-fns";
 import {
   AlarmClockIcon,
   ArrowDownWideNarrowIcon,
   ArrowUpNarrowWideIcon,
+  BetweenHorizontalStartIcon,
   BookDashedIcon,
   BookMarkedIcon,
+  CheckCircleIcon,
   HistoryIcon,
   ListFilterIcon,
+  TagIcon,
+  XCircleIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -80,12 +95,24 @@ function EventsListItem({ event }: { event: EventWithData }) {
   );
 }
 
-export default function EventsList({ events }: { events: EventWithData[] }) {
+export default function EventsList({
+  events,
+  categories,
+  tags,
+}: {
+  events: EventWithData[];
+  categories: Category[];
+  tags: Tag[];
+}) {
   const [filteredEvents, setFilteredEvents] = useState(events);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc" as const);
   const [showOnlyPublished, setShowOnlyPublished] = useState(false);
   const [showOnlyUpcoming, setShowOnlyUpcoming] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null,
+  );
+  const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
 
   const onToggleSortOrder = () => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
@@ -99,46 +126,139 @@ export default function EventsList({ events }: { events: EventWithData[] }) {
     setShowOnlyUpcoming((prevShowOnlyUpcoming) => !prevShowOnlyUpcoming);
   };
 
-  useEffect(() => {
-    const filtered = events.filter((event) => {
-      if (
-        (showOnlyPublished && !event.published) ||
-        (showOnlyUpcoming && !(event.date >= new Date())) ||
-        (searchQuery &&
-          !(
-            event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            event.description.toLowerCase().includes(searchQuery.toLowerCase())
-          ))
-      )
-        return false;
-      return true;
-    });
+  const onCategorySelect = (category: Category) => {
+    setSelectedCategoryId(category.id);
+  };
 
-    setFilteredEvents(
-      filtered.sort((a, b) => {
-        if (sortOrder === "asc") {
-          return a.date > b.date ? 1 : -1;
-        } else {
-          return a.date < b.date ? 1 : -1;
-        }
-      }),
-    );
-  }, [events, showOnlyPublished, showOnlyUpcoming, sortOrder, searchQuery]);
+  useEffect(() => {
+    let filtered = events;
+
+    if (showOnlyPublished) {
+      filtered = filtered.filter((event) => event.published);
+    }
+
+    if (showOnlyUpcoming) {
+      filtered = filtered.filter((event) => event.date >= new Date());
+    }
+
+    if (selectedCategoryId) {
+      filtered = filtered.filter(
+        (event) => event.category?.id === selectedCategoryId,
+      );
+    }
+
+    if (selectedTagId) {
+      filtered = filtered.filter((event) =>
+        event.tags.some((tag) => tag.id === selectedTagId),
+      );
+    }
+
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (event) =>
+          event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          event.description.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+    }
+
+    if (sortOrder === "desc") {
+      filtered = filtered.sort((a, b) => a.date.getTime() - b.date.getTime());
+    } else {
+      filtered = filtered.sort((a, b) => b.date.getTime() - a.date.getTime());
+    }
+
+    setFilteredEvents(filtered);
+  }, [
+    events,
+    searchQuery,
+    selectedCategoryId,
+    selectedTagId,
+    showOnlyPublished,
+    showOnlyUpcoming,
+    sortOrder,
+  ]);
 
   return (
     <main>
       <Card className="mb-5 flex w-full items-center justify-between gap-3 px-2 py-1">
-        <aside className="flex gap-1">
+        <aside className="flex items-center gap-1">
           <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline">
-                  <ListFilterIcon className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Filter events</TooltipContent>
-            </Tooltip>
+            <DropdownMenu>
+              <Tooltip>
+                <DropdownMenuTrigger asChild>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline">
+                      <ListFilterIcon className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                </DropdownMenuTrigger>
+                <TooltipContent>Filter events</TooltipContent>
+              </Tooltip>
+              <DropdownMenuContent>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <BetweenHorizontalStartIcon className="h-4 w-4" />
+                    <span>Filter by category</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      {categories.map((category) => (
+                        <DropdownMenuItem
+                          key={category.id}
+                          onClick={() => onCategorySelect(category)}
+                          className={cn(
+                            selectedCategoryId === category.id
+                              ? "bg-accent text-accent-foreground"
+                              : "",
+                            "flex items-center justify-between",
+                          )}
+                        >
+                          {category.name}
+                          <CheckCircleIcon
+                            className={cn(
+                              selectedCategoryId == category.id ? "" : "hidden",
+                              "h-3 w-3 text-accent-foreground",
+                            )}
+                          />
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <TagIcon className="h-4 w-4" />
+                    <span>Filter by tag</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      {tags.map((tag) => (
+                        <DropdownMenuItem
+                          key={tag.id}
+                          onClick={() => setSelectedTagId(tag.id)}
+                          className={cn(
+                            selectedTagId === tag.id
+                              ? "bg-accent text-accent-foreground"
+                              : "",
+                            "flex items-center justify-between",
+                          )}
+                        >
+                          {tag.name}
+                          <CheckCircleIcon
+                            className={cn(
+                              selectedTagId == tag.id ? "" : "hidden",
+                              "h-3 w-3 text-accent-foreground",
+                            )}
+                          />
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </TooltipProvider>
+
           <Input
             placeholder="Search event titles and descriptions"
             className="w-48 text-sm sm:w-64 md:w-80 lg:w-96 xl:w-96 2xl:w-96"
@@ -146,6 +266,27 @@ export default function EventsList({ events }: { events: EventWithData[] }) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+
+          {(selectedCategoryId ?? selectedTagId ?? searchQuery) && (
+            <TooltipProvider>
+              <Tooltip>
+                <Toggle
+                  aria-label="Clear filters"
+                  className="hover:bg-primary/10"
+                  onClick={() => {
+                    setSelectedCategoryId(null);
+                    setSelectedTagId(null);
+                    setSearchQuery("");
+                  }}
+                >
+                  <TooltipTrigger asChild>
+                    <XCircleIcon className="h-4 w-4" />
+                  </TooltipTrigger>
+                  <TooltipContent>Clear filters</TooltipContent>
+                </Toggle>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </aside>
 
         <aside className="flex gap-1">

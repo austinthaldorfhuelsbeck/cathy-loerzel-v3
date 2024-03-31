@@ -8,9 +8,9 @@ export default async function AdminEventsPage() {
   // Fetch all events
   const events = await api.events.getAll();
 
-  // Fetch all categories and tags
-  const categories = await api.categories.getAllEventCategories();
-  const tags = await api.tags.getAllEventTags();
+  // Fetch all eventCategories and eventTags
+  const eventCategories = await api.categories.getAllEventCategories();
+  const eventTags = await api.tags.getAllEventTags();
 
   return (
     <>
@@ -21,7 +21,13 @@ export default async function AdminEventsPage() {
         </Link>
       </header>
 
-      {<EventsList events={events as EventWithData[]} />}
+      {
+        <EventsList
+          events={events as EventWithData[]}
+          categories={eventCategories}
+          tags={eventTags}
+        />
+      }
     </>
   );
 }
