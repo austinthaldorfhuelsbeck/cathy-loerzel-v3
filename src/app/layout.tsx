@@ -3,6 +3,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Cormorant_Garamond } from "next/font/google";
 
+import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -28,12 +29,15 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "bg-background h-screen font-serif antialiased",
+          "h-screen bg-background font-serif antialiased",
           cormorant.variable,
         )}
       >
         <ClerkProvider>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TRPCReactProvider>
+            {children}
+            <Toaster />
+          </TRPCReactProvider>
         </ClerkProvider>
       </body>
     </html>

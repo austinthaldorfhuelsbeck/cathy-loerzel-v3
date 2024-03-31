@@ -1,4 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { z } from "zod";
 
 export const tagRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -42,4 +43,48 @@ export const tagRouter = createTRPCRouter({
       },
     });
   }),
+
+  getById: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.tag.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
+
+  create: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        slug: z.string(),
+        color: z.string(),
+        description: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.tag.create({
+        data: input,
+      });
+    }),
+
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        slug: z.string(),
+        color: z.string(),
+        description: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.tag.update({
+        where: {
+          id: input.id,
+        },
+        data: input,
+      });
+    }),
 });

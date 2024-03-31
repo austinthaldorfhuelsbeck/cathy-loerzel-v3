@@ -26,3 +26,10 @@ export function capitalize(input: string) {
 export function pluralize(input: string) {
   return input.endsWith("y") ? input.slice(0, -1) + "ies" : input + "s";
 }
+
+export function convertToSlug(input: string) {
+  return input
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
+}
