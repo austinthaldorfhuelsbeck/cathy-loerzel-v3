@@ -150,4 +150,76 @@ export const postRouter = createTRPCRouter({
 
       return addDataToPost(post);
     }),
+
+  getById: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const post = await ctx.db.post.findFirst({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!post) return null;
+
+      return post;
+    }),
+
+  create: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        slug: z.string(),
+        categoryId: z.number(),
+        description: z.string(),
+        imageUrl: z.string().optional(),
+        audioUrl: z.string().optional(),
+        videoUrl: z.string().optional(),
+        href: z.string().optional(),
+        published: z.boolean(),
+        featured: z.boolean(),
+        content: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.post.create({
+        data: input,
+      });
+    }),
+
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        slug: z.string(),
+        categoryId: z.number(),
+        description: z.string(),
+        imageUrl: z.string().optional(),
+        audioUrl: z.string().optional(),
+        videoUrl: z.string().optional(),
+        href: z.string().optional(),
+        published: z.boolean(),
+        featured: z.boolean(),
+        content: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.post.update({
+        where: {
+          id: input.id,
+        },
+        data: input,
+      });
+    }),
+
+  delete: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.post.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });

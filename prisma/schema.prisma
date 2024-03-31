@@ -16,10 +16,10 @@ model Post {
     slug        String    @unique
     date        DateTime  @default(now())
     description String    @db.Text
-    content     String    @db.Text
+    content     String?   @db.Text
     published   Boolean
     featured    Boolean
-    href        String
+    href        String?
     imageUrl    String?
     audioUrl    String?
     videoUrl    String?
