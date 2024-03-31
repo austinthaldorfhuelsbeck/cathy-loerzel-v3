@@ -1,6 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
 import { type Event } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 async function addDataToEvent(event: Event) {
@@ -18,6 +19,8 @@ async function addDataToEvent(event: Event) {
       },
     },
   });
+
+  if (!category) throw new TRPCError({ code: "NOT_FOUND" });
 
   return {
     ...event,
