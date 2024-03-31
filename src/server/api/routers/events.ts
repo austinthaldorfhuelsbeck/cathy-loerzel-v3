@@ -42,6 +42,18 @@ export const eventRouter = createTRPCRouter({
     return Promise.all(events.map(addDataToEvent));
   }),
 
+  getDrafts: publicProcedure.query(async ({ ctx }) => {
+    const events = await ctx.db.event.findMany({
+      where: {
+        published: false,
+      },
+    });
+
+    if (!events) return [];
+
+    return events;
+  }),
+
   getUpcomingPublished: publicProcedure.query(async ({ ctx }) => {
     const events = await ctx.db.event.findMany({
       where: {
