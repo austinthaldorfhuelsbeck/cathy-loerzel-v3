@@ -1,4 +1,5 @@
 "use client";
+
 import { useUser } from "@clerk/nextjs";
 
 import { LoadingPage } from "@/app/_components/loading";
@@ -9,6 +10,10 @@ import { DashboardBadges } from "../_components/dashboard-badges";
 import { DashboardFilter } from "../_components/dashboard-filter";
 import DashboardGrid from "../_components/dashboard-grid";
 import DashboardPageHeader from "../_components/dashboard-page-header";
+import {
+  FilterBarSkeleton,
+  GridSkeleton,
+} from "../_components/dashboard-skeletons";
 import { useFilter } from "../_hooks/useFilter";
 
 export default function AdminPostsPage() {
@@ -32,19 +37,22 @@ export default function AdminPostsPage() {
     <>
       <DashboardPageHeader type="post" />
 
+      {(!posts || !postCategories || !postTags) && <FilterBarSkeleton />}
       {posts && postCategories && postTags && (
-        <section className="flex flex-col">
-          <DashboardFilter
-            type="post"
-            categories={postCategories}
-            tags={postTags}
-            filterProvider={filterProvider}
-          />
-          <DashboardBadges filterProvider={filterProvider} />
-        </section>
+        <DashboardFilter
+          type="post"
+          categories={postCategories}
+          tags={postTags}
+          filterProvider={filterProvider}
+        />
       )}
 
-      {posts && <DashboardGrid items={filterProvider.filteredItems} />}
+      <DashboardBadges filterProvider={filterProvider} />
+
+      {!posts && <GridSkeleton />}
+      {posts && (
+        <DashboardGrid type="post" items={filterProvider.filteredItems} />
+      )}
     </>
   );
 }

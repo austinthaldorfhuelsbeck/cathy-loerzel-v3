@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { capitalize, pluralize } from "@/lib/utils";
 import Link from "next/link";
 
 export default function DashboardPageHeader({ type }: { type: string }) {
-  const typeCapitalized = type.charAt(0).toUpperCase() + type.slice(1);
-
   return (
     <header className="flex justify-between">
-      <h1 className="text-2xl font-bold">{`${typeCapitalized}s`}</h1>
-      <Link href={`/admin/${type}s/new`}>
-        <Button>{`Create ${typeCapitalized}`}</Button>
+      <h1 className="text-2xl font-bold">{capitalize(pluralize(type))}</h1>
+      <Link href={`/admin/${pluralize(type)}/new`}>
+        <Button>{`Create ${capitalize(type)}`}</Button>
       </Link>
     </header>
   );

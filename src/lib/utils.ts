@@ -6,8 +6,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function shorten(text: string, maxLength: number) {
-  return text.length > maxLength
-    ? `${text.split(" ").slice(0, maxLength).join(" ")}...`
+  const words = text.split(" ");
+
+  return words.length > maxLength
+    ? `${words.slice(0, maxLength).join(" ")}...`
     : text;
 }
 
@@ -15,4 +17,12 @@ export function timeToRead(text: string) {
   const wordsPerMinute = 200;
   const words = text.split(" ").length;
   return Math.ceil(words / wordsPerMinute);
+}
+
+export function capitalize(input: string) {
+  return input.charAt(0).toUpperCase() + input.slice(1);
+}
+
+export function pluralize(input: string) {
+  return input.endsWith("y") ? input.slice(0, -1) + "ies" : input + "s";
 }

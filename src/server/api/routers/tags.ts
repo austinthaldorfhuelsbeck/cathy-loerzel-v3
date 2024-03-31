@@ -1,6 +1,14 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
 export const tagRouter = createTRPCRouter({
+  getAll: publicProcedure.query(({ ctx }) => {
+    return ctx.db.tag.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
+  }),
+
   getAllEventTags: publicProcedure.query(({ ctx }) => {
     return ctx.db.tag.findMany({
       where: {
