@@ -63,7 +63,7 @@ export function useFilter(items?: (PostWithData | EventWithData)[]) {
       tempItems = tempItems.filter(
         (item) =>
           item.name.toLowerCase().includes(lowerQuery) ||
-          item.description.toLowerCase().includes(lowerQuery),
+          item.description?.toLowerCase().includes(lowerQuery),
       );
     }
     if (sortOrder === "asc") {
