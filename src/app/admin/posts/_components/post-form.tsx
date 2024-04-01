@@ -3,7 +3,6 @@
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -56,7 +55,6 @@ const formSchema = z.object({
   audioUrl: z.string().optional(),
   videoUrl: z.string().optional(),
   href: z.string().optional(),
-  published: z.boolean(),
   featured: z.boolean(),
   content: z.string().optional(),
 });
@@ -115,7 +113,6 @@ export function PostForm({ post }: { post?: Post }) {
       audioUrl: post?.audioUrl ?? "",
       videoUrl: post?.videoUrl ?? "",
       href: post?.href ?? "",
-      published: post?.published ?? false,
       featured: post?.featured ?? false,
       content: post?.content ?? "",
     },
@@ -124,7 +121,7 @@ export function PostForm({ post }: { post?: Post }) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     post
       ? updatePostMutation.mutate({ id: post.id, ...values })
-      : createPostMutation.mutate(values);
+      : createPostMutation.mutate({ published: false, ...values });
   }
 
   // Automatically fill in slug based on name
@@ -249,22 +246,6 @@ export function PostForm({ post }: { post?: Post }) {
               <FormLabel>External URL</FormLabel>
               <FormControl>
                 <Input placeholder="External URL" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="published"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
-              <FormLabel>Published</FormLabel>
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
               </FormControl>
               <FormMessage />
             </FormItem>

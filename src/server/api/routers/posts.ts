@@ -199,7 +199,6 @@ export const postRouter = createTRPCRouter({
         audioUrl: z.string().optional(),
         videoUrl: z.string().optional(),
         href: z.string().optional(),
-        published: z.boolean(),
         featured: z.boolean(),
         content: z.string().optional(),
       }),
