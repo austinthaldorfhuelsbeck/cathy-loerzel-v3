@@ -97,7 +97,7 @@ function FullListItem({
           </ul>
         </CardHeader>
         <CardContent className="p-3">
-          <p className="text-sm">{shorten(listItem.description, 30)}</p>
+          <p className="text-sm">{shorten(listItem.description ?? "", 30)}</p>
         </CardContent>
         <CardFooter className="p-3">
           <Link href={slugLink} target="_blank">
