@@ -73,6 +73,7 @@ export default async function PostPage({
                 <time>{format(post.createdAt, "PPP")}</time>
                 <p className="font-bold">
                   {post.category?.slug === "writing" &&
+                    post.content &&
                     `Reading Time: ${timeToRead(post.content)} min`}
                 </p>
               </CardHeader>
