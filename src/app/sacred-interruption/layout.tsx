@@ -1,5 +1,5 @@
-import Footer from "../_components/footer";
-import Navigation from "../_components/navigation";
+import Footer from "../../components/footer";
+import Navigation from "../../components/navigation";
 
 export default function SacredInterruptionLayout({
   children,

@@ -1,5 +1,5 @@
-import Footer from "@/app/_components/footer";
-import Navigation from "@/app/_components/navigation";
+import Footer from "@/components/footer";
+import Navigation from "@/components/navigation";
 
 export default function CoachingLayout({
   children,

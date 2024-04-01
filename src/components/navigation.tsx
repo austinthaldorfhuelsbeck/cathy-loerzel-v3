@@ -1,7 +1,7 @@
 import { api } from "@/trpc/server";
 import Image from "next/image";
 import Link from "next/link";
-import NavigationItems from "./navigation-items";
+import NavigationItems from "../app/_components/navigation-items";
 
 type NavigationItem = {
   title: string;
