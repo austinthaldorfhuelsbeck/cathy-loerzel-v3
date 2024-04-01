@@ -39,7 +39,7 @@ export default function EventCard({ event }: { event: EventWithData }) {
 
         <Link href={`/events/${event.slug}`}>
           <p className="hidden hover:underline md:inline-block">
-            {shorten(event.description, 30)}
+            {shorten(event.description ?? "", 30)}
           </p>
         </Link>
       </CardContent>
