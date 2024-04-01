@@ -180,7 +180,6 @@ export const eventRouter = createTRPCRouter({
         categoryId: z.number(),
         description: z.string().optional(),
         imageUrl: z.string().optional(),
-        published: z.boolean(),
       }),
     )
     .mutation(({ ctx, input }) => {

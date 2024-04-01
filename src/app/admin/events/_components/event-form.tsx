@@ -5,7 +5,6 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -66,7 +65,6 @@ const formSchema = z.object({
     .max(1024, { message: "Description is too long" })
     .optional(),
   imageUrl: z.string().optional(),
-  published: z.boolean(),
   content: z.string().optional(),
 });
 
@@ -125,14 +123,13 @@ export function EventForm({ event }: { event?: Event }) {
       description: event?.description ?? "",
       imageUrl: event?.imageUrl ?? "",
       content: event?.content ?? "",
-      published: event?.published ?? false,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     event
       ? updateEventMutation.mutate({ id: event.id, ...values })
-      : createEventMutation.mutate(values);
+      : createEventMutation.mutate({ published: false, ...values });
   }
 
   // Automatically fill in slug based on name
@@ -147,25 +144,33 @@ export function EventForm({ event }: { event?: Event }) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mx-auto flex max-w-6xl flex-col gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-3"
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Event name</FormLabel>
-              <FormControl>
-                <Input placeholder="Event name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <section className="lg:col-span-2">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Event name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Event name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </section>
         <FormField
           control={form.control}
           name="slug"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Slug</FormLabel>
+              <FormLabel>
+                <span>Slug</span>
+                <span className="text-sm text-muted-foreground">
+                  {" "}
+                  (automatically generated)
+                </span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Event slug" {...field} />
               </FormControl>
@@ -250,48 +255,40 @@ export function EventForm({ event }: { event?: Event }) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Event description" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="imageUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image URL</FormLabel>
-              <FormControl>
-                <Input placeholder="Event image URL" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="published"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
-              <FormLabel>Published</FormLabel>
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <section className="lg:col-span-2">
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Event description"
+                    className="min-h-56"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </section>
+        <section className="sm:col-span-2 lg:col-span-1">
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Image URL</FormLabel>
+                <FormControl>
+                  <Input placeholder="Event image URL" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </section>
         <div className="sm:col-span-2 lg:col-span-3">
           <FormField
             control={form.control}
@@ -300,7 +297,11 @@ export function EventForm({ event }: { event?: Event }) {
               <FormItem>
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Event content" {...field} />
+                  <Textarea
+                    placeholder="Event content"
+                    className="min-h-80"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

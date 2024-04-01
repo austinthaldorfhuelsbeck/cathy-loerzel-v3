@@ -22,11 +22,18 @@ export default function AdminPage() {
         <h1 className="text-2xl font-bold">Dashboard</h1>
       </header>
 
-      <main>
+      <main className="mx-auto flex max-w-6xl flex-col gap-5 md:grid md:grid-cols-2 lg:grid-cols-3">
         {!postDrafts && !eventDrafts && <Skeleton className="h-56" />}
         {postDrafts && eventDrafts && (
-          <DraftsTable postDrafts={postDrafts} eventDrafts={eventDrafts} />
+          <section className="h-full md:col-span-2 lg:col-span-3">
+            <DraftsTable postDrafts={postDrafts} eventDrafts={eventDrafts} />
+          </section>
         )}
+        <Skeleton className="h-56 min-w-56" />
+        <Skeleton className="h-56 min-w-56" />
+        <Skeleton className="h-56 min-w-56" />
+        <Skeleton className="h-56 min-w-56" />
+        <Skeleton className="h-56 min-w-56" />
       </main>
     </>
   );

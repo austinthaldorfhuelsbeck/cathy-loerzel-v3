@@ -23,7 +23,10 @@ function DraftsTableRow({
   return (
     <TableRow className="hover:bg-primary/20">
       <TableCell className="flex items-center gap-2 font-medium">
-        <Link className="hover:underline" href={`/${type}s/edit/${draft.id}`}>
+        <Link
+          className="hover:underline"
+          href={`/admin/${type}s/edit?id=${draft.id}`}
+        >
           <span>{draft.name}</span>
         </Link>
         <FilePenLineIcon width={15} height={15} />
