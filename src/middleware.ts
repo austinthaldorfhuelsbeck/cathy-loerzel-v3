@@ -2,7 +2,7 @@ import { authMiddleware } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export default authMiddleware({
-  afterAuth(auth, req, evt) {
+  afterAuth(auth, req) {
     const { pathname } = req.nextUrl;
 
     // Redirect all users from the home page ("/") to "/home" regardless of authentication status
