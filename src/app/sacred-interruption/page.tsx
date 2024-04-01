@@ -6,8 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import ContentBlock from "../_components/content-block";
 import SubFooter from "../_components/sub-footer";
-import SubscriptionForm from "../_components/subscription-form";
 import EventCard from "../events/_components/event-card";
+import NewsletterForm from "../home/_components/custom-form";
 
 export default async function SacredInterruptionPage() {
   // Fetch upcoming events
@@ -170,7 +170,7 @@ export default async function SacredInterruptionPage() {
         <Skeleton className="h-96 w-full" />
       )}
 
-      <SubscriptionForm />
+      <NewsletterForm />
       <SubFooter />
     </>
   );

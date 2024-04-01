@@ -3,12 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import ContentBlock from "../_components/content-block";
 import SubFooter from "../_components/sub-footer";
-import SubscriptionForm from "../_components/subscription-form";
 import HeaderCard from "./_components/header-card";
 import Testimonials from "./_components/testimonials";
 
 import sampleContents from "../../../public/images/redeeming-sample-contents.jpg";
 import stillLife from "../../../public/images/redeeming-still-life.jpg";
+import NewsletterForm from "../home/_components/custom-form";
 
 export default async function RedeemingHeartachePage() {
   return (
@@ -133,7 +133,7 @@ export default async function RedeemingHeartachePage() {
         </Link>
       </Card>
 
-      <SubscriptionForm />
+      <NewsletterForm />
 
       <SubFooter />
     </>

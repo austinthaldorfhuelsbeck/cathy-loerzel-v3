@@ -6,9 +6,9 @@ import Link from "next/link";
 import CategoryCards from "../_components/category-cards";
 import ContactForm from "../_components/contact-form";
 import SubFooter from "../_components/sub-footer";
-import SubscriptionForm from "../_components/subscription-form";
 import EventCard from "../events/_components/event-card";
 import Hero from "./_components/Hero";
+import NewsletterForm from "./_components/custom-form";
 
 export default async function HomePage() {
   const upcomingEvents = await api.events.getUpcomingPublished();
@@ -18,7 +18,9 @@ export default async function HomePage() {
     <>
       <Hero />
 
-      <SubscriptionForm />
+      {/* <SubscriptionForm /> */}
+
+      <NewsletterForm />
 
       {upcomingEvents ? (
         <div className="mx-auto max-w-2xl lg:max-w-4xl">

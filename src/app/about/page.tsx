@@ -4,7 +4,7 @@ import Link from "next/link";
 import ContactForm from "../_components/contact-form";
 import ContentBlock from "../_components/content-block";
 import SubFooter from "../_components/sub-footer";
-import SubscriptionForm from "../_components/subscription-form";
+import NewsletterForm from "../home/_components/custom-form";
 
 export default function AboutPage() {
   return (
@@ -132,7 +132,7 @@ export default function AboutPage() {
         </Card>
       </div>
 
-      <SubscriptionForm />
+      <NewsletterForm />
       <ContactForm />
       <SubFooter />
     </>

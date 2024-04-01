@@ -1,8 +1,8 @@
 import CategoryCards from "@/app/_components/category-cards";
 import FeaturedPostBanner from "@/app/_components/featured-post-banner";
 import { CategoriesSkeleton } from "@/app/_components/sub-footer";
-import SubscriptionForm from "@/app/_components/subscription-form";
 import TagCards from "@/app/_components/tag-cards";
+import NewsletterForm from "@/app/home/_components/custom-form";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -178,7 +178,7 @@ export default async function PostPage({
       {featuredPost && <FeaturedPostBanner post={featuredPost} />}
 
       <TagCards tags={postTags} type="post" />
-      <SubscriptionForm />
+      <NewsletterForm />
     </>
   );
 }

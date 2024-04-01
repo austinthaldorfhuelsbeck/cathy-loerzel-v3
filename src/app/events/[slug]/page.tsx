@@ -1,7 +1,7 @@
 import CategoryCards from "@/app/_components/category-cards";
 import { CategoriesSkeleton } from "@/app/_components/sub-footer";
-import SubscriptionForm from "@/app/_components/subscription-form";
 import TagCards from "@/app/_components/tag-cards";
+import NewsletterForm from "@/app/home/_components/custom-form";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -106,7 +106,7 @@ export default async function EventPage({
       </main>
 
       <TagCards tags={eventTags} type="event" />
-      <SubscriptionForm />
+      <NewsletterForm />
     </>
   );
 }
