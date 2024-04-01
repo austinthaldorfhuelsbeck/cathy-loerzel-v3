@@ -40,9 +40,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { cn, convertToSlug } from "@/lib/utils";
 import { api } from "@/trpc/react";
+import { UploadButton } from "@/utils/uploadthing";
 import { type Event } from "@prisma/client";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -140,6 +142,14 @@ export function EventForm({ event }: { event?: Event }) {
 
   return (
     <Form {...form}>
+      <Image
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        src={form.watch("imageUrl") || "/images/Abstract-1.jpg"}
+        alt={form.watch("name") || "Event image"}
+        width={1200}
+        height={600}
+        className="h-64 w-full object-cover"
+      />
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="mx-auto flex max-w-6xl flex-col gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-3"
@@ -275,18 +285,18 @@ export function EventForm({ event }: { event?: Event }) {
           />
         </section>
         <section className="sm:col-span-2 lg:col-span-1">
-          <FormField
-            control={form.control}
-            name="imageUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Image URL</FormLabel>
-                <FormControl>
-                  <Input placeholder="Event image URL" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          <FormLabel>Image</FormLabel>
+          <UploadButton
+            className="ut-button:bg-primary ut-button:ut-readying:bg-primary/50 p-3"
+            endpoint="imageUploader"
+            onClientUploadComplete={(res) => {
+              // Update the form with the new image URL
+              form.setValue("imageUrl", res[0]?.url);
+            }}
+            onUploadError={(error: Error) => {
+              // Do something with the error.
+              alert(`ERROR! ${error.message}`);
+            }}
           />
         </section>
         <div className="sm:col-span-2 lg:col-span-3">
