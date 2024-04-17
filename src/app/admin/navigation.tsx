@@ -11,7 +11,7 @@ export default function Navigation() {
   const { signOut } = useClerk();
   const router = useRouter();
   return (
-    <nav className="sticky top-0 flex justify-between bg-secondary font-sans text-sm font-semibold tracking-wide text-secondary-foreground shadow">
+    <nav className="sticky top-0 z-50 flex justify-between bg-secondary font-sans text-sm font-semibold tracking-wide text-secondary-foreground shadow">
       <ul className="flex items-center">
         {adminNavigationItems.map((item, index) => (
           <Link href={item.href} key={index}>

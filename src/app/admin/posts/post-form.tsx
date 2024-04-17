@@ -2,17 +2,6 @@
 
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -33,11 +22,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { convertToSlug } from "@/lib/utils";
 import { api } from "@/trpc/react";
+import { UploadButton } from "@/utils/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Post } from "@prisma/client";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { PostFormHeader } from "./post-form-header";
 
 const formSchema = z.object({
   name: z
@@ -47,7 +39,7 @@ const formSchema = z.object({
   slug: z
     .string()
     .min(1, { message: "Slug is required" })
-    .max(64, { message: "Slug is too long" })
+    .max(128, { message: "Slug is too long" })
     .regex(/^[a-z0-9-]+$/, { message: "Slug must be lowercase with dashes" }),
   categoryId: z.number(),
   description: z.string().max(1024, { message: "Description is too long" }),
@@ -63,7 +55,10 @@ export function PostForm({ post }: { post?: Post }) {
   const { toast } = useToast();
   const router = useRouter();
 
-  // 
+  // Fetch all available post categories for the select dropdown
+  const categoriesQuery = api.categories.getAllPostCategories.useQuery();
+
+  // Create, update, and delete post mutations
   const createPostMutation = api.posts.create.useMutation({
     onSuccess: () => {
       form.reset();
@@ -121,9 +116,17 @@ export function PostForm({ post }: { post?: Post }) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    post
-      ? updatePostMutation.mutate({ id: post.id, ...values })
-      : createPostMutation.mutate({ published: false, ...values });
+    // post
+    //   ? updatePostMutation.mutate({ id: post.id, ...values })
+    //   : createPostMutation.mutate({ published: false, ...values });
+    toast({
+      title: "Post saved",
+      description: (
+        <pre className="bg-slate-800 text-white">
+          <code>{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      ),
+    });
   }
 
   // Automatically fill in slug based on name
@@ -136,9 +139,14 @@ export function PostForm({ post }: { post?: Post }) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mx-auto flex max-w-6xl flex-col gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-3"
+        className="flex flex-col gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-3"
       >
-        <header className="col-span-2">
+        <PostFormHeader
+          post={post}
+          handleDeletePost={(id: number) => deletePostMutation.mutate({ id })}
+        />
+
+        <section className="sm:col-span-2 lg:col-span-3">
           <FormField
             control={form.control}
             name="name"
@@ -184,55 +192,90 @@ export function PostForm({ post }: { post?: Post }) {
               </FormItem>
             )}
           />
-        </header>
-        <FormField
-          control={form.control}
-          name="categoryId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <FormControl>
-                <Select onValueChange={field.onChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Post category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={"1"}>Category 1</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        </section>
 
-        <FormField
-          control={form.control}
-          name="href"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>External URL</FormLabel>
-              <FormControl>
-                <Input placeholder="External URL" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {categoriesQuery.data && (
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Post category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categoriesQuery.data.map((category) => (
+                        <SelectItem
+                          key={category.id}
+                          value={category.id.toString()}
+                        >
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        <section className="lg:col-span-2">
+          <FormField
+            control={form.control}
+            name="href"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>External URL</FormLabel>
+                <FormControl>
+                  <Input placeholder="External URL" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </section>
 
         <FormField
           control={form.control}
           name="imageUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image URL</FormLabel>
+              <FormLabel>Image</FormLabel>
               <FormControl>
-                <Input placeholder="Image URL" {...field} />
+                <div className="relative rounded-md border">
+                  {field.value && (
+                    <Image
+                      src={field.value}
+                      alt="Post image"
+                      width={400}
+                      height={200}
+                      className="absolute h-full w-full rounded-md object-cover opacity-50"
+                    />
+                  )}
+                  <UploadButton
+                    className="p-3 ut-button:bg-primary ut-button:ut-readying:bg-primary/50"
+                    endpoint="imageUploader"
+                    onClientUploadComplete={(res) => {
+                      // Update the form with the new image URL
+                      form.setValue("imageUrl", res[0]?.url);
+                    }}
+                    onUploadError={(error: Error) => {
+                      // Do something with the error.
+                      alert(`ERROR! ${error.message}`);
+                    }}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="audioUrl"
@@ -277,45 +320,6 @@ export function PostForm({ post }: { post?: Post }) {
               </FormItem>
             )}
           />
-        </div>
-        <div className="flex items-center justify-between sm:col-span-2 lg:col-span-3">
-          <Button type="submit">Save</Button>
-
-          <Button
-            variant="outline"
-            onClick={() => router.back()}
-            className="ml-2 mr-auto"
-          >
-            Cancel
-          </Button>
-          {post && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="destructive">Delete</Button>
-              </DialogTrigger>
-
-              <DialogContent className="font-sans">
-                <DialogHeader>
-                  <DialogTitle>Are you sure?</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    the post.
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button
-                    variant="destructive"
-                    onClick={() => deletePostMutation.mutate({ id: post.id })}
-                  >
-                    Delete
-                  </Button>
-                  <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          )}
         </div>
       </form>
     </Form>
