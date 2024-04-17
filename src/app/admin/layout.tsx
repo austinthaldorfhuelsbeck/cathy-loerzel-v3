@@ -1,4 +1,4 @@
-import Navigation from "./_components/navigation";
+import Navigation from "./navigation";
 
 export default async function AdminLayout({
   children,

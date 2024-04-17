@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ArrowDownWideNarrowIcon, ArrowUpNarrowWideIcon } from "lucide-react";
-import { type useFilter } from "../../_hooks/useFilter";
+import { type useFilter } from "../_hooks/useFilter";
 
 export function SortOrderButton({
   filterProvider,

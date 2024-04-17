@@ -35,18 +35,6 @@ export const postRouter = createTRPCRouter({
     return Promise.all(posts.map(addDataToPost));
   }),
 
-  getDrafts: publicProcedure.query(async ({ ctx }) => {
-    const posts = await ctx.db.post.findMany({
-      where: {
-        published: false,
-      },
-    });
-
-    if (!posts) return [];
-
-    return posts;
-  }),
-
   getRecommended: publicProcedure
     .input(z.object({ postId: z.number() }))
     .query(async ({ ctx, input }) => {

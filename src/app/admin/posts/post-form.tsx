@@ -62,6 +62,8 @@ const formSchema = z.object({
 export function PostForm({ post }: { post?: Post }) {
   const { toast } = useToast();
   const router = useRouter();
+
+  // 
   const createPostMutation = api.posts.create.useMutation({
     onSuccess: () => {
       form.reset();
@@ -136,32 +138,53 @@ export function PostForm({ post }: { post?: Post }) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mx-auto flex max-w-6xl flex-col gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-3"
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Post name</FormLabel>
-              <FormControl>
-                <Input placeholder="Post name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="slug"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Slug</FormLabel>
-              <FormControl>
-                <Input placeholder="Post slug" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <header className="col-span-2">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder="Post name"
+                    {...field}
+                    className="border-none text-2xl focus-visible:ring-transparent"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder="Post slug"
+                    {...field}
+                    className="border-none text-sm focus-visible:ring-transparent"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Description" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </header>
         <FormField
           control={form.control}
           name="categoryId"
@@ -182,23 +205,21 @@ export function PostForm({ post }: { post?: Post }) {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
-          name="description"
+          name="href"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>External URL</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Description"
-                  {...field}
-                  className="min-h-[150px]"
-                />
+                <Input placeholder="External URL" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="imageUrl"
@@ -233,19 +254,6 @@ export function PostForm({ post }: { post?: Post }) {
               <FormLabel>Video URL</FormLabel>
               <FormControl>
                 <Input placeholder="Video URL" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="href"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>External URL</FormLabel>
-              <FormControl>
-                <Input placeholder="External URL" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { XCircleIcon } from "lucide-react";
-import { type useFilter } from "../../_hooks/useFilter";
+import { type useFilter } from "../_hooks/useFilter";
 
 export function FilterResetButton({
   filterProvider,

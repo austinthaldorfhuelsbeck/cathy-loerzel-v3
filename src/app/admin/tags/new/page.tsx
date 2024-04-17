@@ -2,7 +2,7 @@
 
 import { LoadingPage } from "@/app/_components/loading";
 import { useUser } from "@clerk/nextjs";
-import { BackToAll } from "../../_components/back-to-all";
+import { BackToAll } from "../../back-to-all";
 import { TagForm } from "../_components/tag-form";
 
 export default function NewTagPage() {

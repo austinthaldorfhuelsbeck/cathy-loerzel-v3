@@ -6,15 +6,12 @@ import { LoadingPage } from "@/app/_components/loading";
 import { api } from "@/trpc/react";
 
 import { type PostWithData } from "@/types";
-import { DashboardBadges } from "../_components/dashboard-badges";
-import { DashboardFilter } from "../_components/dashboard-filter";
-import DashboardGrid from "../_components/dashboard-grid";
-import DashboardPageHeader from "../_components/dashboard-page-header";
-import {
-  FilterBarSkeleton,
-  GridSkeleton,
-} from "../_components/dashboard-skeletons";
 import { useFilter } from "../_hooks/useFilter";
+import { DashboardBadges } from "../dashboard-badges";
+import { DashboardFilter } from "../dashboard-filter";
+import DashboardGrid from "../dashboard-grid";
+import DashboardPageHeader from "../dashboard-page-header";
+import { FilterBarSkeleton, GridSkeleton } from "../dashboard-skeletons";
 
 export default function AdminPostsPage() {
   const { isLoaded: clerkUserIsLoaded } = useUser();

@@ -3,9 +3,9 @@
 import { LoadingPage } from "@/app/_components/loading";
 import { api } from "@/trpc/react";
 import { useUser } from "@clerk/nextjs";
-import DashboardGrid from "../_components/dashboard-grid";
-import DashboardPageHeader from "../_components/dashboard-page-header";
-import { GridSkeleton } from "../_components/dashboard-skeletons";
+import DashboardGrid from "../dashboard-grid";
+import DashboardPageHeader from "../dashboard-page-header";
+import { GridSkeleton } from "../dashboard-skeletons";
 
 export default function TagsPage() {
   const { isLoaded: clerkUserIsLoaded } = useUser();

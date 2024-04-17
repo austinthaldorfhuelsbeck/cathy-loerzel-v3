@@ -3,9 +3,9 @@
 import { LoadingPage } from "@/app/_components/loading";
 import { api } from "@/trpc/react";
 import { useUser } from "@clerk/nextjs";
-import { BackToAll } from "../../_components/back-to-all";
-import DashboardPageHeader from "../../_components/dashboard-page-header";
-import { PostForm } from "../_components/post-form";
+import { BackToAll } from "../../back-to-all";
+import DashboardPageHeader from "../../dashboard-page-header";
+import { PostForm } from "../post-form";
 
 export default function EditPostPage({
   searchParams,

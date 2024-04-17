@@ -2,8 +2,8 @@
 
 import { LoadingPage } from "@/app/_components/loading";
 import { useUser } from "@clerk/nextjs";
-import { BackToAll } from "../../_components/back-to-all";
-import { PostForm } from "../_components/post-form";
+import { BackToAll } from "../../back-to-all";
+import { PostForm } from "../post-form";
 
 export default function NewPostPage() {
   const { isLoaded: clerkUserIsLoaded } = useUser();

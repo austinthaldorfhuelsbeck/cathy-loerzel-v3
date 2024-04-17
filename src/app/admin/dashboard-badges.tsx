@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { pluralize } from "@/lib/utils";
-import { type useFilter } from "../_hooks/useFilter";
+import { type useFilter } from "./_hooks/useFilter";
 
 export function DashboardBadges({
   type,

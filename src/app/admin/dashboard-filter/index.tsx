@@ -1,5 +1,5 @@
 import { type Category, type Tag } from "@prisma/client";
-import { type useFilter } from "../../_hooks/useFilter";
+import { type useFilter } from "../_hooks/useFilter";
 
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

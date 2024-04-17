@@ -2,8 +2,8 @@
 
 import { LoadingPage } from "@/app/_components/loading";
 import { useUser } from "@clerk/nextjs";
-import { BackToAll } from "../../_components/back-to-all";
-import { EventForm } from "../_components/event-form";
+import { BackToAll } from "../../back-to-all";
+import { EventForm } from "../event-form";
 
 export default function NewEventPage() {
   const { isLoaded: clerkUserIsLoaded } = useUser();

@@ -23,7 +23,7 @@ import {
   ListFilterIcon,
   TagIcon,
 } from "lucide-react";
-import { type useFilter } from "../../_hooks/useFilter";
+import { type useFilter } from "../_hooks/useFilter";
 
 export function FilterDropdown({
   categories,
