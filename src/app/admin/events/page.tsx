@@ -47,7 +47,7 @@ export default function AdminEventsPage() {
         />
       )}
 
-      <DashboardBadges filterProvider={filterProvider} />
+      <DashboardBadges type="event" filterProvider={filterProvider} />
 
       {!events && <GridSkeleton />}
       {events && (

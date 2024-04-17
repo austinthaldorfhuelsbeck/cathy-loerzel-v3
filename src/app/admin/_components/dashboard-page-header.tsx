@@ -7,7 +7,7 @@ export default function DashboardPageHeader({
   title,
 }: {
   title?: string;
-  type: string;
+  type: "event" | "post" | "category" | "tag";
 }) {
   return (
     <header className="flex justify-between">

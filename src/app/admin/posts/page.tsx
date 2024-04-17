@@ -47,7 +47,7 @@ export default function AdminPostsPage() {
         />
       )}
 
-      <DashboardBadges filterProvider={filterProvider} />
+      <DashboardBadges type="post" filterProvider={filterProvider} />
 
       {!posts && <GridSkeleton />}
       {posts && (

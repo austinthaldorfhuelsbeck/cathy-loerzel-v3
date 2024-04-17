@@ -15,7 +15,7 @@ export function DashboardFilter(props: {
   tags: Tag[];
   filterProvider: ReturnType<typeof useFilter>;
 }) {
-  const { filterProvider } = props;
+  const { filterProvider, type } = props;
 
   return (
     <Card className="mb-5 flex w-full items-center justify-between gap-3 px-2 py-1">
@@ -23,9 +23,9 @@ export function DashboardFilter(props: {
         <FilterDropdown {...props} />
 
         <Input
-          placeholder="Search post titles and descriptions"
+          placeholder={`Search ${type} titles and descriptions`}
           className="w-48 text-sm sm:w-64 md:w-80 lg:w-96 xl:w-96 2xl:w-96"
-          aria-label="Search posts"
+          aria-label={`Search ${type}s`}
           value={filterProvider.searchQuery}
           onChange={(e) => filterProvider.setSearchQuery(e.target.value)}
         />

@@ -1,22 +1,30 @@
 import { Badge } from "@/components/ui/badge";
+import { pluralize } from "@/lib/utils";
 import { type useFilter } from "../_hooks/useFilter";
 
 export function DashboardBadges({
+  type,
   filterProvider,
 }: {
   filterProvider: ReturnType<typeof useFilter>;
+  type: "event" | "post" | "category" | "tag";
 }) {
+  const { filteredItems, selectedTag, selectedCategory } = filterProvider;
+
   return (
     <div className="flex gap-2">
-      {filterProvider.selectedCategory && (
-        <Badge>{`Showing posts in category: ${filterProvider.selectedCategory.name}`}</Badge>
+      {selectedCategory && (
+        <Badge>{`Showing ${filteredItems.length} posts in category: ${selectedCategory.name}`}</Badge>
       )}
-      {filterProvider.selectedTag && (
+      {selectedTag && (
         <Badge
           style={{
-            backgroundColor: filterProvider.selectedTag.color,
+            backgroundColor: selectedTag.color,
           }}
-        >{`Showing posts with tag: ${filterProvider.selectedTag.name}`}</Badge>
+        >{`Showing ${filteredItems.length} posts with tag: ${selectedTag.name}`}</Badge>
+      )}
+      {!selectedCategory && !selectedTag && (
+        <Badge>{`Showing ${filteredItems.length} ${filteredItems.length !== 1 ? pluralize(type) : type}`}</Badge>
       )}
     </div>
   );
