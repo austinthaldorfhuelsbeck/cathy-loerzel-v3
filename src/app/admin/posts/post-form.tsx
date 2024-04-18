@@ -281,9 +281,27 @@ export function PostForm({ post }: { post?: Post }) {
           name="audioUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Audio URL</FormLabel>
+              <FormLabel>Audio</FormLabel>
+              {field.value && (
+                <audio controls className="w-full">
+                  <source src={field.value} type="audio/mpeg" />
+                </audio>
+              )}
               <FormControl>
-                <Input placeholder="Audio URL" {...field} />
+                <div className="relative rounded-md border">
+                  <UploadButton
+                    className="p-3 ut-button:bg-primary ut-button:ut-readying:bg-primary/50"
+                    endpoint="audioUploader"
+                    onClientUploadComplete={(res) => {
+                      // Update the form with the new image URL
+                      form.setValue("audioUrl", res[0]?.url);
+                    }}
+                    onUploadError={(error: Error) => {
+                      // Do something with the error.
+                      alert(`ERROR! ${error.message}`);
+                    }}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -294,9 +312,27 @@ export function PostForm({ post }: { post?: Post }) {
           name="videoUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Video URL</FormLabel>
+              <FormLabel>Video</FormLabel>
+              {field.value && (
+                <video controls className="w-full">
+                  <source src={field.value} type="audio/mpeg" />
+                </video>
+              )}
               <FormControl>
-                <Input placeholder="Video URL" {...field} />
+                <div className="relative rounded-md border">
+                  <UploadButton
+                    className="p-3 ut-button:bg-primary ut-button:ut-readying:bg-primary/50"
+                    endpoint="videoUploader"
+                    onClientUploadComplete={(res) => {
+                      // Update the form with the new image URL
+                      form.setValue("videoUrl", res[0]?.url);
+                    }}
+                    onUploadError={(error: Error) => {
+                      // Do something with the error.
+                      alert(`ERROR! ${error.message}`);
+                    }}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
