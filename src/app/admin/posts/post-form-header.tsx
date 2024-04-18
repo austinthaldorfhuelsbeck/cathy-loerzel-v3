@@ -35,7 +35,9 @@ export function PostFormHeader({
   return (
     <header className="sticky right-2 top-10 z-10 flex items-center gap-3 border-b bg-background/80 pb-1 sm:col-span-2 lg:col-span-3">
       <aside className="flex flex-1 flex-col items-start justify-center gap-3">
-        <h1 className="text-2xl font-bold">Edit Post</h1>
+        <h1 className="text-2xl font-bold">
+          {post ? "Edit Post" : "New Post"}
+        </h1>
         <BackToAll type="post" />
       </aside>
 

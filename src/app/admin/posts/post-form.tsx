@@ -5,6 +5,7 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,6 +30,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import ReactPlayer from "react-player";
 import { PostFormHeader } from "./post-form-header";
 
 const formSchema = z.object({
@@ -41,7 +43,7 @@ const formSchema = z.object({
     .min(1, { message: "Slug is required" })
     .max(128, { message: "Slug is too long" })
     .regex(/^[a-z0-9-]+$/, { message: "Slug must be lowercase with dashes" }),
-  categoryId: z.number(),
+  categoryId: z.string().max(8),
   description: z.string().max(1024, { message: "Description is too long" }),
   imageUrl: z.string().optional(),
   audioUrl: z.string().optional(),
@@ -104,7 +106,7 @@ export function PostForm({ post }: { post?: Post }) {
     defaultValues: {
       name: post?.name ?? "",
       slug: post?.slug ?? "",
-      categoryId: post?.categoryId ?? 0,
+      categoryId: post?.categoryId.toString() ?? "",
       description: post?.description ?? "",
       imageUrl: post?.imageUrl ?? "",
       audioUrl: post?.audioUrl ?? "",
@@ -123,7 +125,16 @@ export function PostForm({ post }: { post?: Post }) {
       title: "Post saved",
       description: (
         <pre className="bg-slate-800 text-white">
-          <code>{JSON.stringify(values, null, 2)}</code>
+          <code>
+            {JSON.stringify(
+              {
+                ...values,
+                categoryId: Number(values.categoryId),
+              },
+              null,
+              2,
+            )}
+          </code>
         </pre>
       ),
     });
@@ -146,6 +157,7 @@ export function PostForm({ post }: { post?: Post }) {
           handleDeletePost={(id: number) => deletePostMutation.mutate({ id })}
         />
 
+        {/* Basic Information (name, slug, desc) */}
         <section className="sm:col-span-2 lg:col-span-3">
           <FormField
             control={form.control}
@@ -170,7 +182,7 @@ export function PostForm({ post }: { post?: Post }) {
               <FormItem>
                 <FormControl>
                   <Input
-                    placeholder="Post slug"
+                    placeholder="Post slug (autofills)"
                     {...field}
                     className="border-none text-sm focus-visible:ring-transparent"
                   />
@@ -218,6 +230,9 @@ export function PostForm({ post }: { post?: Post }) {
                     </SelectContent>
                   </Select>
                 </FormControl>
+                <FormDescription>
+                  A post needs to be assigned to a category.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -234,12 +249,17 @@ export function PostForm({ post }: { post?: Post }) {
                 <FormControl>
                   <Input placeholder="External URL" {...field} />
                 </FormControl>
+                <FormDescription>
+                  If this post should link to an external URL, enter it here
+                  (optional).
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
         </section>
 
+        {/* File uploaders */}
         <FormField
           control={form.control}
           name="imageUrl"
@@ -265,8 +285,11 @@ export function PostForm({ post }: { post?: Post }) {
                       form.setValue("imageUrl", res[0]?.url);
                     }}
                     onUploadError={(error: Error) => {
-                      // Do something with the error.
-                      alert(`ERROR! ${error.message}`);
+                      toast({
+                        title: "Error",
+                        description: error.message,
+                        variant: "destructive",
+                      });
                     }}
                   />
                 </div>
@@ -275,7 +298,6 @@ export function PostForm({ post }: { post?: Post }) {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="audioUrl"
@@ -297,8 +319,11 @@ export function PostForm({ post }: { post?: Post }) {
                       form.setValue("audioUrl", res[0]?.url);
                     }}
                     onUploadError={(error: Error) => {
-                      // Do something with the error.
-                      alert(`ERROR! ${error.message}`);
+                      toast({
+                        title: "Error",
+                        description: error.message,
+                        variant: "destructive",
+                      });
                     }}
                   />
                 </div>
@@ -314,9 +339,7 @@ export function PostForm({ post }: { post?: Post }) {
             <FormItem>
               <FormLabel>Video</FormLabel>
               {field.value && (
-                <video controls className="w-full">
-                  <source src={field.value} type="audio/mpeg" />
-                </video>
+                <ReactPlayer controls className="w-full" url={field.value} />
               )}
               <FormControl>
                 <div className="relative rounded-md border">
@@ -328,8 +351,11 @@ export function PostForm({ post }: { post?: Post }) {
                       form.setValue("videoUrl", res[0]?.url);
                     }}
                     onUploadError={(error: Error) => {
-                      // Do something with the error.
-                      alert(`ERROR! ${error.message}`);
+                      toast({
+                        title: "Error",
+                        description: error.message,
+                        variant: "destructive",
+                      });
                     }}
                   />
                 </div>
@@ -338,6 +364,7 @@ export function PostForm({ post }: { post?: Post }) {
             </FormItem>
           )}
         />
+
         <div className="sm:col-span-2 lg:col-span-3">
           <FormField
             control={form.control}
