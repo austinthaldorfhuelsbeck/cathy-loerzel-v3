@@ -19,13 +19,5 @@ export default function EditPostPage({
   const post = postQuery.data;
 
   if (!clerkUserIsLoaded) return <LoadingPage />;
-  return (
-    post && (
-      <main className="flex items-center justify-center">
-        <div className="w-[1200px]">
-          <PostForm post={post} />
-        </div>
-      </main>
-    )
-  );
+  return post && <PostForm post={post} />;
 }

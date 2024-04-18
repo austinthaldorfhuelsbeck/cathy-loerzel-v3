@@ -17,6 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Toggle } from "@/components/ui/toggle";
 import {
   EllipsisVerticalIcon,
   ExternalLinkIcon,
@@ -27,10 +28,12 @@ import { BackToAll } from "../back-to-all";
 
 export function PostFormHeader({
   post,
-  handleDeletePost,
+  onDelete,
+  togglePreview,
 }: {
   post?: { id: number; slug: string } | null;
-  handleDeletePost: (id: number) => void;
+  onDelete: (id: number) => void;
+  togglePreview: () => void;
 }) {
   return (
     <header className="sticky right-2 top-10 z-10 flex items-center gap-3 border-b bg-background/80 pb-1 sm:col-span-2 lg:col-span-3">
@@ -44,9 +47,15 @@ export function PostFormHeader({
       <aside className="flex flex-1 items-center justify-end gap-3">
         <Button type="submit">Save</Button>
 
-        <Button variant="outline" onClick={(e) => e.preventDefault()}>
+        <Toggle
+          aria-label="Toggle preview mode"
+          type="button"
+          onClick={() => {
+            togglePreview();
+          }}
+        >
           Preview
-        </Button>
+        </Toggle>
 
         <Button variant="outline" onClick={(e) => e.preventDefault()}>
           Publish
@@ -84,10 +93,7 @@ export function PostFormHeader({
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button
-                  variant="destructive"
-                  onClick={() => handleDeletePost(post.id)}
-                >
+                <Button variant="destructive" onClick={() => onDelete(post.id)}>
                   Delete
                 </Button>
                 <DialogClose asChild>

@@ -1,6 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
 import { type Post } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 const addDataToPost = async (post: Post) => {
@@ -18,6 +19,9 @@ const addDataToPost = async (post: Post) => {
       },
     },
   });
+
+  if (!category)
+    throw new TRPCError({ code: "NOT_FOUND", message: "Category not found" });
 
   return {
     ...post,
