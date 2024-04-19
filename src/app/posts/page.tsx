@@ -12,7 +12,7 @@ import { type Post } from "@prisma/client";
 import CategoryCards from "../_components/category-cards";
 import FeaturedPostBanner from "../_components/featured-post-banner";
 import TagCards from "../_components/tag-cards";
-import PostCard from "./_components/post-card";
+import PostCard from "./post-card";
 
 export default async function PostsPage({
   searchParams,

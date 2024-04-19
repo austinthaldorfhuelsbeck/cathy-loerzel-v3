@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
 import Image from "next/image";
 import Link from "next/link";
-import { PostContent } from "../post-content";
+import { PostContent } from "./post-content";
 
 export default async function PostPage({
   params,
@@ -39,9 +39,9 @@ export default async function PostPage({
         <CategoryCards categories={postCategories} />
 
         {!post && <Skeleton className="h-96 w-full" />}
-
-        {post && <PostContent post={post} />}
       </header>
+
+      {post && <PostContent post={post} />}
 
       {relatedPosts?.length ? (
         <section className="flex flex-col gap-4 p-4">

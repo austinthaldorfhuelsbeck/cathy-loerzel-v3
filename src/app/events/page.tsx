@@ -11,7 +11,7 @@ import { type EventWithData } from "@/types";
 import type { Event } from "@prisma/client";
 import CategoryCards from "../_components/category-cards";
 import TagCards from "../_components/tag-cards";
-import EventCard from "./_components/event-card";
+import EventCard from "./event-card";
 
 export default async function EventsPage({
   searchParams,

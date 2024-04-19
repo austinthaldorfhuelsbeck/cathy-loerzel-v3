@@ -160,7 +160,6 @@ export const eventRouter = createTRPCRouter({
         categoryId: z.number(),
         description: z.string().optional(),
         imageUrl: z.string().optional(),
-        published: z.boolean(),
       }),
     )
     .mutation(({ ctx, input }) => {
@@ -197,6 +196,28 @@ export const eventRouter = createTRPCRouter({
       return ctx.db.event.delete({
         where: {
           id: input.id,
+        },
+      });
+    }),
+
+  togglePublished: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const event = await ctx.db.event.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!event)
+        throw new TRPCError({ code: "NOT_FOUND", message: "Event not found" });
+
+      return ctx.db.event.update({
+        where: {
+          id: event.id,
+        },
+        data: {
+          published: !event.published,
         },
       });
     }),

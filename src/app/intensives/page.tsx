@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ContentBlock from "../_components/content-block";
 import SubFooter from "../_components/sub-footer";
-import EventCard from "../events/_components/event-card";
+import EventCard from "../events/event-card";
 import NewsletterForm from "../home/_components/custom-form";
 
 export default async function IntensivesPage() {

@@ -162,14 +162,12 @@ export const postRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         slug: z.string(),
+        description: z.string().optional(),
         categoryId: z.number(),
-        description: z.string(),
         imageUrl: z.string().optional(),
         audioUrl: z.string().optional(),
         videoUrl: z.string().optional(),
         href: z.string().optional(),
-        published: z.boolean(),
-        featured: z.boolean(),
         content: z.string().optional(),
       }),
     )
@@ -185,13 +183,12 @@ export const postRouter = createTRPCRouter({
         id: z.number(),
         name: z.string(),
         slug: z.string(),
+        description: z.string().optional(),
         categoryId: z.number(),
-        description: z.string(),
         imageUrl: z.string().optional(),
         audioUrl: z.string().optional(),
         videoUrl: z.string().optional(),
         href: z.string().optional(),
-        featured: z.boolean(),
         content: z.string().optional(),
       }),
     )
@@ -210,6 +207,28 @@ export const postRouter = createTRPCRouter({
       return ctx.db.post.delete({
         where: {
           id: input.id,
+        },
+      });
+    }),
+
+  togglePublished: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const post = await ctx.db.post.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!post)
+        throw new TRPCError({ code: "NOT_FOUND", message: "Post not found" });
+
+      return ctx.db.post.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          published: !post.published,
         },
       });
     }),
