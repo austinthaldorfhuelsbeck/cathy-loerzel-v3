@@ -61,4 +61,8 @@ export const tagColors = [
   "#a79186",
   "#a8baba",
   "#ac612c",
+  "#1f353b",
+  "#efefea",
+  "#e9e4d5",
+  "#ac862d",
 ];

@@ -11,40 +11,42 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
-import type { Tag } from "@prisma/client";
+import type { Category, Tag } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
-import { CircleXIcon } from "lucide-react";
+import { CirclePlusIcon, CircleXIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { NewTagForm } from "./new-tag-form";
 
-export type PostWithTags = {
+export type ItemWithTags = {
   id: number;
   name: string;
   tags: Tag[];
+  category?: Category;
 };
 
-function ExistingTags({ post }: { post: PostWithTags }) {
+function AddTag({
+  item,
+  type,
+}: {
+  item: ItemWithTags;
+  type: "post" | "event";
+}) {
   const router = useRouter();
-  const removeTagMutation = api.postTags.removeTag.useMutation({
+  const [open, setOpen] = useState(false);
+  const [selectedTag, setSelectedTag] = useState<Tag | undefined>();
+
+  const { data: tags, isLoading: tagsLoading } = api.tags.getAll.useQuery();
+  const addPostTagMutation = api.postTags.addTag.useMutation({
     onSuccess: () => {
       router.refresh();
       toast({
-        title: "Tag removed",
+        title: "Tag added",
       });
     },
     onError: (error) => {
@@ -55,33 +57,7 @@ function ExistingTags({ post }: { post: PostWithTags }) {
       });
     },
   });
-  return (
-    <div className="flex flex-wrap gap-1">
-      {post.tags.map((tag) => (
-        <Badge key={tag.id} style={{ backgroundColor: tag.color }}>
-          {tag.name}
-          <CircleXIcon
-            className="ml-1 h-4 w-4 cursor-pointer"
-            onClick={() => {
-              removeTagMutation.mutate({
-                postId: post.id,
-                tagId: tag.id,
-              });
-            }}
-          />
-        </Badge>
-      ))}
-    </div>
-  );
-}
-
-function AddTag({ post }: { post: PostWithTags }) {
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [selectedTag, setSelectedTag] = useState<Tag | undefined>();
-
-  const { data: tags, isLoading: tagsLoading } = api.tags.getAll.useQuery();
-  const addTagMutation = api.postTags.addTag.useMutation({
+  const addEventTagMutation = api.eventTags.addTag.useMutation({
     onSuccess: () => {
       router.refresh();
       toast({
@@ -99,41 +75,33 @@ function AddTag({ post }: { post: PostWithTags }) {
 
   useEffect(() => {
     if (!selectedTag) return;
-    addTagMutation.mutate({
-      postId: post.id,
-      tagId: selectedTag.id,
-    });
+    if (type === "post")
+      addPostTagMutation.mutate({
+        postId: item.id,
+        tagId: selectedTag.id,
+      });
+    if (type === "event")
+      addEventTagMutation.mutate({
+        eventId: item.id,
+        tagId: selectedTag.id,
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [post.name, selectedTag]);
+  }, [item.name, selectedTag]);
 
-  if (tagsLoading) return <Skeleton className="h-6 w-24" />;
+  if (tagsLoading) return null;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" className="h-auto justify-start p-1">
-          Add a tag
+          <CirclePlusIcon className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0" side="right" align="start">
         <Command>
-          <CommandInput placeholder="Search or create a tag..." />
+          <CommandInput placeholder="Search tags..." />
           <CommandList>
-            <CommandEmpty>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button>
-                    <span>Create a new tag</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="font-sans">
-                  <DialogHeader>
-                    <DialogTitle>Create a new tag</DialogTitle>
-                  </DialogHeader>
-                  <NewTagForm />
-                </DialogContent>
-              </Dialog>
-            </CommandEmpty>
+            <CommandEmpty>No tags found.</CommandEmpty>
             <CommandGroup>
               {tags?.map((tag) => (
                 <CommandItem
@@ -157,10 +125,71 @@ function AddTag({ post }: { post: PostWithTags }) {
   );
 }
 
-export const columns: ColumnDef<PostWithTags>[] = [
+function ExistingTags({ item }: { item: ItemWithTags }) {
+  const router = useRouter();
+  const removePostTagMutation = api.postTags.removeTag.useMutation({
+    onSuccess: () => {
+      router.refresh();
+      toast({
+        title: "Tag removed",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+  const removeEventTagMutation = api.eventTags.removeTag.useMutation({
+    onSuccess: () => {
+      router.refresh();
+      toast({
+        title: "Tag removed",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  return (
+    <div className="flex flex-wrap gap-1">
+      {item?.tags.map((tag) => (
+        <Badge key={tag.id} style={{ backgroundColor: tag.color }}>
+          {tag.name}
+          <CircleXIcon
+            className="ml-1 h-4 w-4 cursor-pointer"
+            onClick={() => {
+              if (item.category) {
+                removePostTagMutation.mutate({
+                  postId: item.id,
+                  tagId: tag.id,
+                });
+              } else {
+                removeEventTagMutation.mutate({
+                  eventId: item.id,
+                  tagId: tag.id,
+                });
+              }
+            }}
+          />
+        </Badge>
+      ))}
+      <AddTag item={item} type={item.category ? "post" : "event"} />
+    </div>
+  );
+}
+
+export const columns: ColumnDef<ItemWithTags>[] = [
   {
     accessorKey: "name",
-    header: "Post Name",
+    header: "Name",
     cell: ({ row }) => {
       return <Badge className="bg-muted-foreground">{row.original.name}</Badge>;
     },
@@ -169,13 +198,7 @@ export const columns: ColumnDef<PostWithTags>[] = [
     accessorKey: "tags",
     header: "Tags",
     cell: ({ row }) => {
-      return <ExistingTags post={row.original} />;
-    },
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      return <AddTag post={row.original} />;
+      return <ExistingTags item={row.original} />;
     },
   },
 ];

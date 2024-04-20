@@ -1,6 +1,7 @@
 import { postRouter } from "@/server/api/routers/posts";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { categoryRouter } from "./routers/categories";
+import { eventTagsRouter } from "./routers/event-tags";
 import { eventRouter } from "./routers/events";
 import { postTagsRouter } from "./routers/post-tags";
 import { tagRouter } from "./routers/tags";
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   categories: categoryRouter,
   tags: tagRouter,
   postTags: postTagsRouter,
+  eventTags: eventTagsRouter,
 });
 
 // export type definition of API
