@@ -4,6 +4,7 @@ import TagCards from "@/app/_components/tag-cards";
 import NewsletterForm from "@/app/home/_components/custom-form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
+import { redirect } from "next/navigation";
 import { EventContent } from "./event-content";
 
 export default async function EventPage({
@@ -20,6 +21,7 @@ export default async function EventPage({
   // Fetch event by slug
   const event = await api.events.getBySlug({ slug: slug as string });
 
+  if (!event?.published) return redirect("/not-found");
   return (
     <>
       <header className="flex flex-col gap-3">
