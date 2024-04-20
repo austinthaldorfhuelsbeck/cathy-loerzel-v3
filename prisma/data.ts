@@ -1,23 +1,47 @@
 export const eventCategories = [
   {
     name: "Retreats",
+    slug: "retreats",
     subtitle: "Embodied spiritual healing",
     description:
       "Retreats are a time to step away from the busyness of life and engage in deep, transformative work. Cathy leads retreats that are designed to help you connect with your heart, your story, and the heart of God.",
+    published: true,
   },
-  { name: "Conferences", subtitle: "Opportunities to hear from Cathy" },
-  { name: "Coaching", subtitle: "Story Work and leadership coaching sessions" },
+  {
+    name: "Conferences",
+    slug: "conferences",
+    subtitle: "Opportunities to hear from Cathy",
+    published: true,
+  },
+  {
+    name: "Coaching",
+    slug: "coaching",
+    subtitle: "Story Work and leadership coaching sessions",
+    published: true,
+  },
 ];
 
 export const postCategories = [
   {
     name: "Writing",
+    slug: "writing",
     subtitle: "Blog posts and more...",
     description:
       "Cathy writes about her own journey, the work of The Allender Center, and the intersection of faith and psychology.",
+    published: true,
   },
-  { name: "Podcasts", subtitle: "Features and guest appearances" },
-  { name: "Teaching", subtitle: "Recorded lectures and teaching" },
+  {
+    name: "Podcasts",
+    slug: "podcasts",
+    subtitle: "Features and guest appearances",
+    published: true,
+  },
+  {
+    name: "Teaching",
+    slug: "teaching",
+    subtitle: "Recorded lectures and teaching",
+    published: true,
+  },
 ];
 
 export const tags = [
@@ -25,26 +49,31 @@ export const tags = [
     name: "Redeeming Heartache",
     slug: "redeeming-heartache",
     color: "#e4cdc2",
+    published: true,
   },
   {
     name: "Leadership",
     slug: "leadership",
     color: "#934a26",
+    published: true,
   },
   {
     name: "Sexual Abuse",
     slug: "sexual-abuse",
     color: "#a79186",
+    published: true,
   },
   {
     name: "Allender Methodology",
     slug: "allender-methodology",
     color: "#a8baba",
+    published: true,
   },
   {
     name: "Spiritual Warfare",
     slug: "spiritual-warfare",
     color: "#ac612c",
+    published: true,
   },
 ];
 

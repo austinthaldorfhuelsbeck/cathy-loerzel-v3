@@ -1,4 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const tagRouter = createTRPCRouter({
@@ -94,6 +95,31 @@ export const tagRouter = createTRPCRouter({
       return ctx.db.tag.delete({
         where: {
           id: input.id,
+        },
+      });
+    }),
+
+  togglePublished: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const tag = await ctx.db.tag.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!tag)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Tag not found",
+        });
+
+      return ctx.db.tag.update({
+        where: {
+          id: tag.id,
+        },
+        data: {
+          published: !tag.published,
         },
       });
     }),

@@ -19,8 +19,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Toggle } from "@/components/ui/toggle";
 import { toast } from "@/components/ui/use-toast";
+import { pluralize } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import type { Event, Post } from "@prisma/client";
+import type { Category, Event, Post, Tag } from "@prisma/client";
 import {
   EllipsisVerticalIcon,
   ExternalLinkIcon,
@@ -37,9 +38,9 @@ export function FormHeader({
   togglePreview,
   type,
 }: {
-  item?: Post | Event | null;
+  item?: Post | Event | Category | Tag | null;
   togglePreview: () => void;
-  type: "post" | "event";
+  type: "post" | "event" | "category" | "tag";
 }) {
   const router = useRouter();
 
@@ -48,6 +49,7 @@ export function FormHeader({
     setIsPublished((prev) => !prev);
   }
 
+  // Determine which API endpoint to use for publishing/unpublishing
   const togglePublishedPostMutation = api.posts.togglePublished.useMutation({
     onSuccess: () => {
       togglePublished();
@@ -78,7 +80,55 @@ export function FormHeader({
       });
     },
   });
+  const togglePublishedCategoryMutation =
+    api.categories.togglePublished.useMutation({
+      onSuccess: () => {
+        togglePublished();
+        toast({
+          title: `Category ${isPublished ? "unpublished" : "published"}`,
+        });
+      },
+      onError: (error) => {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
+    });
+  const togglePublishedTagMutation = api.tags.togglePublished.useMutation({
+    onSuccess: () => {
+      togglePublished();
+      toast({
+        title: `Tag ${isPublished ? "unpublished" : "published"}`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+  function onTogglePublished(id: number) {
+    switch (type) {
+      case "post":
+        togglePublishedPostMutation.mutate({ id });
+        break;
+      case "event":
+        togglePublishedEventMutation.mutate({ id });
+        break;
+      case "category":
+        togglePublishedCategoryMutation.mutate({ id });
+        break;
+      case "tag":
+        togglePublishedTagMutation.mutate({ id });
+        break;
+    }
+  }
 
+  // Determine which API endpoint to use for deletion
   const deletePostMutation = api.posts.delete.useMutation({
     onSuccess: () => {
       router.push("/admin/posts");
@@ -103,6 +153,54 @@ export function FormHeader({
       });
     },
   });
+  const deleteCategoryMutation = api.categories.delete.useMutation({
+    onSuccess: () => {
+      router.push("/admin/categories");
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+  const deleteTagMutation = api.tags.delete.useMutation({
+    onSuccess: () => {
+      router.push("/admin/tags");
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+  function onDelete(id: number) {
+    switch (type) {
+      case "post":
+        deletePostMutation.mutate({ id });
+        break;
+      case "event":
+        deleteEventMutation.mutate({ id });
+        break;
+      case "category":
+        deleteCategoryMutation.mutate({ id });
+        break;
+      case "tag":
+        deleteTagMutation.mutate({ id });
+        break;
+    }
+  }
+
+  // Determine which item href to use for previewing
+  const itemHref =
+    type === "post" || type === "event"
+      ? `/${pluralize(type)}/${item?.slug}`
+      : `/${pluralize(
+          ((item as Category)?.type ?? "POST").toLowerCase(),
+        )}?${type}=${item?.slug}`;
 
   return (
     <header className="sticky right-2 top-10 z-10 flex items-center gap-3 border-b bg-background/80 pb-1 sm:col-span-2 lg:col-span-3">
@@ -133,11 +231,7 @@ export function FormHeader({
           disabled={!item}
           onClick={(e) => {
             e.preventDefault();
-            if (item) {
-              type === "post"
-                ? togglePublishedPostMutation.mutate({ id: item.id })
-                : togglePublishedEventMutation.mutate({ id: item.id });
-            }
+            onTogglePublished(item!.id);
           }}
         >
           {isPublished ? "Unpublish" : "Publish"}
@@ -152,15 +246,7 @@ export function FormHeader({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <Link
-                  href={
-                    type === "post"
-                      ? `/posts/${item.slug}`
-                      : `/events/${item.slug}`
-                  }
-                  target="_blank"
-                  passHref
-                >
+                <Link href={itemHref} target="_blank" passHref>
                   <DropdownMenuItem className="cursor-pointer">
                     <ExternalLinkIcon className="mr-2 h-6 w-6" />
                     <span>View on site</span>
@@ -178,19 +264,12 @@ export function FormHeader({
               <DialogHeader>
                 <DialogTitle>Are you sure?</DialogTitle>
                 <DialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  item.
+                  {`This action cannot be undone. This will permanently delete the
+                  ${type}.`}
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button
-                  variant="destructive"
-                  onClick={() =>
-                    type === "post"
-                      ? deletePostMutation.mutate({ id: item.id })
-                      : deleteEventMutation.mutate({ id: item.id })
-                  }
-                >
+                <Button variant="destructive" onClick={() => onDelete(item.id)}>
                   Delete
                 </Button>
                 <DialogClose asChild>

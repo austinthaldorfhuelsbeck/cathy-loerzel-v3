@@ -1,17 +1,11 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
 import { type EventWithData } from "@/types";
 import type { Event } from "@prisma/client";
-import CategoryCards from "../_components/category-cards";
+import { CategoryCards } from "../_components/category-cards";
 import TagCards from "../_components/tag-cards";
 import EventCard from "./event-card";
+import { EventsPageHeader } from "./events-page-header";
 
 export default async function EventsPage({
   searchParams,
@@ -49,50 +43,12 @@ export default async function EventsPage({
       {/* Navigation */}
       <CategoryCards categories={eventCategories} />
       {/* Header */}
-      <header className="flex flex-col items-center justify-center gap-5">
-        <h1 className="text-center text-3xl font-semibold text-muted-foreground">
-          {eventCategory?.name ?? eventTag?.name ?? "All Events"}
-        </h1>
-        <p className="text-center text-xl text-muted-foreground">
-          {eventCategory?.description ??
-            eventTag?.description ??
-            "Catch Cathy at a speaking engagement near you, join a virtual event, or attend an intensive or retreat."}
-        </p>
-        {/* Breadcrumb */}
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/events`}>Events</BreadcrumbLink>
-            </BreadcrumbItem>
-            {category && (
-              <>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    href={`/events?category=${category.toString()}`}
-                  >
-                    {eventCategory?.name}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            )}
-            {tag && (
-              <>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink href={`/events?tag=${tag.toString()}`}>
-                    {eventTag?.name}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            )}
-          </BreadcrumbList>
-        </Breadcrumb>
-      </header>
+      <EventsPageHeader
+        eventCategory={eventCategory}
+        eventTag={eventTag}
+        category={category as string}
+        tag={tag as string}
+      />
 
       {/* Events */}
       <section className="flex flex-col gap-5">

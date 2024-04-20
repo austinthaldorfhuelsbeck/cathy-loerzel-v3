@@ -1,4 +1,4 @@
-import { PrismaClient, Type } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { eventCategories, events, postCategories, posts, tags } from "./data";
 const prisma = new PrismaClient();
 
@@ -20,11 +20,8 @@ async function createCategories(prisma: PrismaClient) {
       where: { slug: category.name.toLowerCase() },
       update: {},
       create: {
-        name: category.name,
-        slug: category.name.toLowerCase(),
-        subtitle: category.subtitle,
-        description: category.description,
-        type: Type.EVENT,
+        ...category,
+        type: "EVENT",
       },
     });
   }
@@ -35,11 +32,8 @@ async function createCategories(prisma: PrismaClient) {
       where: { slug: category.name.toLowerCase() },
       update: {},
       create: {
-        name: category.name,
-        slug: category.name.toLowerCase(),
-        subtitle: category.subtitle,
-        description: category.description,
-        type: Type.POST,
+        ...category,
+        type: "POST",
       },
     });
   }

@@ -1,4 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const categoryRouter = createTRPCRouter({
@@ -75,6 +76,31 @@ export const categoryRouter = createTRPCRouter({
       return ctx.db.category.delete({
         where: {
           id: input.id,
+        },
+      });
+    }),
+
+  togglePublished: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const category = await ctx.db.category.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!category)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Category not found",
+        });
+
+      return ctx.db.category.update({
+        where: {
+          id: category.id,
+        },
+        data: {
+          published: !category.published,
         },
       });
     }),

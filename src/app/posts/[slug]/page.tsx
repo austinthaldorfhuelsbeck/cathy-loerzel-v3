@@ -1,4 +1,4 @@
-import CategoryCards from "@/app/_components/category-cards";
+import { CategoryCards } from "@/app/_components/category-cards";
 import FeaturedPostBanner from "@/app/_components/featured-post-banner";
 import { CategoriesSkeleton } from "@/app/_components/sub-footer";
 import TagCards from "@/app/_components/tag-cards";

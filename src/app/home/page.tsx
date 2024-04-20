@@ -3,7 +3,7 @@ import { api } from "@/trpc/server";
 import { type EventWithData } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import CategoryCards from "../_components/category-cards";
+import { CategoryCards } from "../_components/category-cards";
 import ContactForm from "../_components/contact-form";
 import SubFooter from "../_components/sub-footer";
 import EventCard from "../events/event-card";

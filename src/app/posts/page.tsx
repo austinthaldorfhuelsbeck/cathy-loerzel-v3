@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
 import { type PostWithData } from "@/types";
 import { type Post } from "@prisma/client";
-import CategoryCards from "../_components/category-cards";
+import { CategoryCards } from "../_components/category-cards";
 import FeaturedPostBanner from "../_components/featured-post-banner";
 import TagCards from "../_components/tag-cards";
 import PostCard from "./post-card";

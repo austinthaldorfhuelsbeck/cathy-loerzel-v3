@@ -33,7 +33,11 @@ export function useCategoryForm({ category }: { category?: Category }) {
   const createCategoryMutation = api.categories.create.useMutation({
     onSuccess: () => {
       form.reset();
+      router.refresh();
       router.push("/admin/categories");
+      toast({
+        title: "Category created.",
+      });
     },
     onError: (error) => {
       toast({
@@ -45,8 +49,10 @@ export function useCategoryForm({ category }: { category?: Category }) {
   });
   const updateCategoryMutation = api.categories.update.useMutation({
     onSuccess: () => {
-      form.reset();
-      router.push("/admin/categories");
+      router.refresh();
+      toast({
+        title: "Category saved.",
+      });
     },
     onError: (error) => {
       toast({
@@ -63,7 +69,7 @@ export function useCategoryForm({ category }: { category?: Category }) {
     defaultValues: {
       name: category?.name ?? "",
       slug: category?.slug ?? "",
-      type: category?.type ?? "POST",
+      type: category?.type ?? undefined,
       subtitle: category?.subtitle ?? "",
       description: category?.description ?? "",
     },

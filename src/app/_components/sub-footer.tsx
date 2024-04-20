@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/server";
-import CategoryCards from "./category-cards";
+import { CategoryCards } from "./category-cards";
 import FeaturedPostBanner from "./featured-post-banner";
 import TagCards from "./tag-cards";
 
