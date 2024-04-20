@@ -63,7 +63,11 @@ export function usePostForm({ post }: { post?: Post }) {
   const createPostMutation = api.posts.create.useMutation({
     onSuccess: () => {
       form.reset();
+      router.refresh();
       router.push("/admin/posts");
+      toast({
+        title: "Post created.",
+      });
     },
     onError: (error) => {
       toast({
@@ -75,7 +79,10 @@ export function usePostForm({ post }: { post?: Post }) {
   });
   const updatePostMutation = api.posts.update.useMutation({
     onSuccess: () => {
-      form.reset();
+      router.refresh();
+      toast({
+        title: "Post saved.",
+      });
     },
     onError: (error) => {
       toast({
@@ -95,9 +102,6 @@ export function usePostForm({ post }: { post?: Post }) {
     post
       ? updatePostMutation.mutate({ id: post.id, ...formattedPost })
       : createPostMutation.mutate(formattedPost);
-    toast({
-      title: post ? "Post updated" : "Post created",
-    });
   }
 
   // Show/hide preview

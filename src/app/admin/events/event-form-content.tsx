@@ -64,11 +64,11 @@ export function EventFormContent({
                       alt="Post image"
                       width={400}
                       height={200}
-                      className="absolute h-full w-full rounded-md object-cover opacity-50"
+                      className="absolute h-full w-full object-cover opacity-50"
                     />
                   )}
                   <UploadButton
-                    className="p-3 ut-button:bg-primary ut-button:ut-readying:bg-primary/50"
+                    className="p-3 ut-button:bg-primary ut-button:ut-readying:bg-primary/50 sm:h-56"
                     endpoint="imageUploader"
                     onClientUploadComplete={(res) => {
                       // Update the form with the new image URL
@@ -178,7 +178,19 @@ export function EventFormContent({
           </FormItem>
         )}
       />
-
+      <FormField
+        control={form.control}
+        name="location"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Location</FormLabel>
+            <FormControl>
+              <Input placeholder="Location" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       {!postCategoriesLoading && (
         <FormField
           control={form.control}
@@ -208,7 +220,7 @@ export function EventFormContent({
           )}
         />
       )}
-      <section className="sm:col-span-2 lg:col-span-1">
+      <section className="lg:col-span-3">
         <FormField
           control={form.control}
           name="href"

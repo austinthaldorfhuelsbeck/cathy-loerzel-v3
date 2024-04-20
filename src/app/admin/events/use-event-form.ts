@@ -58,7 +58,11 @@ export function useEventForm({ event }: { event?: Event }) {
   const createEventMutation = api.events.create.useMutation({
     onSuccess: () => {
       form.reset();
+      router.refresh();
       router.push("/admin/events");
+      toast({
+        title: "Event created.",
+      });
     },
     onError: (error) => {
       toast({
@@ -70,8 +74,10 @@ export function useEventForm({ event }: { event?: Event }) {
   });
   const updateEventMutation = api.events.update.useMutation({
     onSuccess: () => {
-      form.reset();
-      router.push("/admin/events");
+      router.refresh();
+      toast({
+        title: "Event saved.",
+      });
     },
     onError: (error) => {
       toast({
@@ -88,13 +94,9 @@ export function useEventForm({ event }: { event?: Event }) {
       ...values,
       categoryId: parseInt(values.categoryId),
     };
-    // event
-    //   ? updateEventMutation.mutate({ id: event.id, ...formattedEvent })
-    //   : createEventMutation.mutate(formattedEvent);
-    toast({
-      title: "Success",
-      description: JSON.stringify(formattedEvent, null, 2),
-    });
+    event
+      ? updateEventMutation.mutate({ id: event.id, ...formattedEvent })
+      : createEventMutation.mutate(formattedEvent);
   }
 
   // Show/hide preview
