@@ -17,12 +17,13 @@ async function createCategories(prisma: PrismaClient) {
   // Create event categories in the new database
   for (const category of eventCategories) {
     await prisma.category.upsert({
-      where: { slug: category.label.toLowerCase() },
+      where: { slug: category.name.toLowerCase() },
       update: {},
       create: {
-        name: category.label,
-        slug: category.label.toLowerCase(),
-        description: category.text,
+        name: category.name,
+        slug: category.name.toLowerCase(),
+        subtitle: category.subtitle,
+        description: category.description,
         type: Type.EVENT,
       },
     });
@@ -31,12 +32,13 @@ async function createCategories(prisma: PrismaClient) {
   // Create post categories in the new database
   for (const category of postCategories) {
     await prisma.category.upsert({
-      where: { slug: category.label.toLowerCase() },
+      where: { slug: category.name.toLowerCase() },
       update: {},
       create: {
-        name: category.label,
-        slug: category.label.toLowerCase(),
-        description: category.text,
+        name: category.name,
+        slug: category.name.toLowerCase(),
+        subtitle: category.subtitle,
+        description: category.description,
         type: Type.POST,
       },
     });

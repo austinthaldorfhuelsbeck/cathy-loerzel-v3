@@ -1,3 +1,4 @@
+import { LoadingPage } from "@/app/_components/loading";
 import { api } from "@/trpc/server";
 import { PostForm } from "../post-form";
 
@@ -11,6 +12,6 @@ export default async function EditPostPage({
     id: parseInt(searchParams.id as string),
   });
 
-  if (!post) return null;
+  if (!post) return <LoadingPage />;
   return <PostForm post={post} />;
 }

@@ -3,7 +3,7 @@
 import { LoadingPage } from "@/app/_components/loading";
 import { useUser } from "@clerk/nextjs";
 import { BackToAll } from "../../back-to-all";
-import { CategoryForm } from "../_components/category-form";
+import { CategoryForm } from "../category-form";
 
 export default function NewCategoryPage() {
   const { isLoaded: clerkUserIsLoaded } = useUser();

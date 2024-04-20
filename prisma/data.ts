@@ -1,13 +1,23 @@
 export const eventCategories = [
-  { label: "Retreats", text: "Embodied spiritual healing" },
-  { label: "Conferences", text: "Opportunities to hear from Cathy" },
-  { label: "Coaching", text: "Story Work and leadership coaching sessions" },
+  {
+    name: "Retreats",
+    subtitle: "Embodied spiritual healing",
+    description:
+      "Retreats are a time to step away from the busyness of life and engage in deep, transformative work. Cathy leads retreats that are designed to help you connect with your heart, your story, and the heart of God.",
+  },
+  { name: "Conferences", subtitle: "Opportunities to hear from Cathy" },
+  { name: "Coaching", subtitle: "Story Work and leadership coaching sessions" },
 ];
 
 export const postCategories = [
-  { label: "Writing", text: "Blog posts and more..." },
-  { label: "Podcasts", text: "Features and guest appearances" },
-  { label: "Teaching", text: "Recorded lectures and teaching" },
+  {
+    name: "Writing",
+    subtitle: "Blog posts and more...",
+    description:
+      "Cathy writes about her own journey, the work of The Allender Center, and the intersection of faith and psychology.",
+  },
+  { name: "Podcasts", subtitle: "Features and guest appearances" },
+  { name: "Teaching", subtitle: "Recorded lectures and teaching" },
 ];
 
 export const tags = [
