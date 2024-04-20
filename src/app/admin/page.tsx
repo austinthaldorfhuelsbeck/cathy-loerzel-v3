@@ -1,14 +1,33 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/trpc/server";
+import type { Post } from "@prisma/client";
+import FeaturedPostBanner from "../_components/featured-post-banner";
 import { LoadingPage } from "../_components/loading";
-import { TagsManager } from "./tags-manager";
+import { FeaturedPostCombobox } from "./featured-post-combobox";
+
+function FeaturedPostManager({ posts }: { posts: Post[] }) {
+  const featuredPost = posts.find((post) => post.featured);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Featured Post Manager</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <FeaturedPostCombobox posts={posts} />
+        {featuredPost && <FeaturedPostBanner post={featuredPost} />}
+      </CardContent>
+    </Card>
+  );
+}
 
 export default async function AdminPage() {
-  const tags = await api.tags.getAll();
+  const posts = await api.posts.getAll();
 
-  if (!tags) return <LoadingPage />;
+  if (!posts) return <LoadingPage />;
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col">
-      <TagsManager tags={tags} />
-    </div>
+    <>
+      <FeaturedPostManager posts={posts} />
+    </>
   );
 }

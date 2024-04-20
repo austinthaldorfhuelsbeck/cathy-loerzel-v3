@@ -96,21 +96,6 @@ export function FormHeader({
         });
       },
     });
-  const togglePublishedTagMutation = api.tags.togglePublished.useMutation({
-    onSuccess: () => {
-      togglePublished();
-      toast({
-        title: `Tag ${isPublished ? "unpublished" : "published"}`,
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
   function onTogglePublished(id: number) {
     switch (type) {
       case "post":

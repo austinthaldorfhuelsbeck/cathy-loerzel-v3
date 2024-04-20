@@ -55,7 +55,7 @@ export const postRouter = createTRPCRouter({
       const posts = await ctx.db.post.findMany({
         where: {
           OR: [
-            { id: postWithData.categoryId },
+            { categoryId: postWithData.categoryId },
             {
               tags: {
                 some: {
@@ -71,14 +71,20 @@ export const postRouter = createTRPCRouter({
             id: post.id,
           },
         },
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: [
+          {
+            views: "desc",
+          },
+          {
+            date: "desc",
+          },
+        ],
+        take: 6,
       });
 
       if (!posts) return [];
 
-      return Promise.all(posts.slice(0, 6).map(addDataToPost));
+      return Promise.all(posts.map(addDataToPost));
     }),
 
   getByCategory: publicProcedure
@@ -229,6 +235,36 @@ export const postRouter = createTRPCRouter({
         },
         data: {
           published: !post.published,
+        },
+      });
+    }),
+
+  setNewFeatured: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const currentFeatured = await ctx.db.post.findFirst({
+        where: {
+          featured: true,
+        },
+      });
+
+      if (currentFeatured) {
+        await ctx.db.post.update({
+          where: {
+            id: currentFeatured.id,
+          },
+          data: {
+            featured: false,
+          },
+        });
+      }
+
+      return ctx.db.post.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          featured: true,
         },
       });
     }),

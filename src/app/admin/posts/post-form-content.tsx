@@ -108,12 +108,13 @@ export function PostFormContent({
           control={form.control}
           name="slug"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex items-center justify-start">
+              <p className="mt-[9.5px] text-sm">cathyloerzel.com/posts/</p>
               <FormControl>
                 <Input
-                  placeholder="Post slug (autofills)"
+                  placeholder="post-name"
                   {...field}
-                  className="border-none text-sm focus-visible:ring-transparent"
+                  className="border-none p-0 text-sm focus-visible:ring-transparent"
                 />
               </FormControl>
               <FormMessage />

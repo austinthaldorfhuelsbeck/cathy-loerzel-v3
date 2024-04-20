@@ -111,12 +111,13 @@ export function EventFormContent({
           control={form.control}
           name="slug"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex items-center justify-start">
+              <p className="mt-[9.5px] text-sm">cathyloerzel.com/events/</p>
               <FormControl>
                 <Input
-                  placeholder="Event slug (autofills)"
+                  placeholder="event-name"
                   {...field}
-                  className="border-none text-sm focus-visible:ring-transparent"
+                  className="border-none p-0 text-sm focus-visible:ring-transparent"
                 />
               </FormControl>
               <FormMessage />

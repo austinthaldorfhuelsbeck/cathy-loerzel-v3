@@ -62,7 +62,7 @@ export function ListItem({
         </CardContent>
         <CardFooter className="p-3">
           <Link href={slugLink} target="_blank">
-            <p className="text-sm text-muted-foreground">{listItem.slug}</p>
+            <p className="text-sm text-muted-foreground">{`cathyloerzel.com/${pluralize(type)}/${listItem.slug}`}</p>
           </Link>
         </CardFooter>
       </Card>
