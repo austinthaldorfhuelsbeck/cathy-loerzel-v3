@@ -1,36 +1,36 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { Button } from "../../components/ui/button";
-import { Calendar } from "../../components/ui/calendar";
-import { Checkbox } from "../../components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
-} from "../../components/ui/form";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../components/ui/popover";
-import { Textarea } from "../../components/ui/textarea";
-import { toast } from "../../components/ui/use-toast";
-import { cn } from "../../lib/utils";
+} from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
 );
-const formSchema = z.object({
+const contactFormSchema = z.object({
   name: z.string(),
   company: z.string().optional(),
   phone: z.string().regex(phoneRegex, "Invalid phone number").optional(),
@@ -44,22 +44,24 @@ const formSchema = z.object({
 });
 
 const ContactForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof contactFormSchema>>({
+    resolver: zodResolver(contactFormSchema),
   });
   const isEvent = form.watch("isEvent");
+  const [thankYou, setThankYou] = useState(false);
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+  function onSubmit(values: z.infer<typeof contactFormSchema>) {
     toast({
-      title: "You submitted the following values:",
+      title: "Message sent!",
       description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        <pre className="whitespace-pre-wrap">
+          {JSON.stringify(values, null, 2)}
         </pre>
       ),
     });
-  };
+    setThankYou(true);
+    form.reset();
+  }
 
   return (
     <section
@@ -77,9 +79,9 @@ const ContactForm = () => {
           className="mx-8 grid max-w-2xl grid-cols-1 gap-4 pb-10 md:mx-auto md:grid-cols-2"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <h2 className="font-sans text-2xl font-bold text-primary md:col-span-2">
+          <FormLabel className="font-sans text-2xl font-bold text-primary md:col-span-2">
             Reach out today.
-          </h2>
+          </FormLabel>
 
           <FormField
             control={form.control}
@@ -146,9 +148,9 @@ const ContactForm = () => {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <Label htmlFor="isEvent" className="text-primary">
+                <FormLabel htmlFor="isEvent" className="text-primary">
                   I am reaching out about an event
-                </Label>
+                </FormLabel>
               </FormItem>
             )}
           />
@@ -241,6 +243,12 @@ const ContactForm = () => {
           >
             Let&#39;s talk!
           </Button>
+
+          {thankYou && (
+            <FormMessage className="col-span-2 text-primary">
+              Thank you for reaching out! We will get back to you soon.
+            </FormMessage>
+          )}
         </form>
       </Form>
     </section>

@@ -56,8 +56,8 @@ export default async function Navigation() {
           <Image
             src={"/logo.png"}
             alt="logo"
-            width="200"
-            height="42"
+            width={200}
+            height={42}
             priority
           />
         </Link>

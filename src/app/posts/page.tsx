@@ -109,9 +109,12 @@ export default async function PostsPage({
             <Skeleton className="aspect-video w-full rounded-t-lg object-cover sm:aspect-square" />
           </>
         )}
-        {posts?.map((post) => (
-          <PostCard key={post.id} post={post as PostWithData} />
-        ))}
+        {posts?.map(
+          (post) =>
+            post.published && (
+              <PostCard key={post.id} post={post as PostWithData} />
+            ),
+        )}
       </section>
 
       {featuredPost && <FeaturedPostBanner post={featuredPost} />}
