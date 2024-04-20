@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { adminNavigationItems } from "@/lib/consts";
 import { useClerk } from "@clerk/clerk-react";
-import { LogOutIcon } from "lucide-react";
+import { ExternalLinkIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -22,14 +22,25 @@ export default function Navigation() {
         ))}
       </ul>
 
-      <Button
-        variant="secondary"
-        className="flex items-center justify-center gap-1 rounded-none bg-destructive p-2 text-destructive-foreground"
-        onClick={() => signOut(() => router.push("/"))}
-      >
-        <LogOutIcon size={16} />
-        Sign Out
-      </Button>
+      <aside className="flex gap-5">
+        <Link href="/" target="_blank">
+          <Button
+            variant="link"
+            className="flex items-center gap-1 text-background"
+          >
+            <ExternalLinkIcon size={16} />
+            <span>View Site</span>
+          </Button>
+        </Link>
+        <Button
+          variant="secondary"
+          className="flex items-center justify-center gap-1 rounded-none bg-destructive p-2 text-destructive-foreground"
+          onClick={() => signOut(() => router.push("/"))}
+        >
+          <LogOutIcon size={16} />
+          <span>Sign Out</span>
+        </Button>
+      </aside>
     </nav>
   );
 }

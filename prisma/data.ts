@@ -49,31 +49,26 @@ export const tags = [
     name: "Redeeming Heartache",
     slug: "redeeming-heartache",
     color: "#e4cdc2",
-    published: true,
   },
   {
     name: "Leadership",
     slug: "leadership",
     color: "#934a26",
-    published: true,
   },
   {
     name: "Sexual Abuse",
     slug: "sexual-abuse",
     color: "#a79186",
-    published: true,
   },
   {
     name: "Allender Methodology",
     slug: "allender-methodology",
     color: "#a8baba",
-    published: true,
   },
   {
     name: "Spiritual Warfare",
     slug: "spiritual-warfare",
     color: "#ac612c",
-    published: true,
   },
 ];
 

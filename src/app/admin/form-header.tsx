@@ -21,7 +21,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { toast } from "@/components/ui/use-toast";
 import { pluralize } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import type { Category, Event, Post, Tag } from "@prisma/client";
+import type { Category, Event, Post } from "@prisma/client";
 import {
   EllipsisVerticalIcon,
   ExternalLinkIcon,
@@ -38,9 +38,9 @@ export function FormHeader({
   togglePreview,
   type,
 }: {
-  item?: Post | Event | Category | Tag | null;
+  item?: Post | Event | Category | null;
   togglePreview: () => void;
-  type: "post" | "event" | "category" | "tag";
+  type: "post" | "event" | "category";
 }) {
   const router = useRouter();
 
@@ -121,9 +121,6 @@ export function FormHeader({
         break;
       case "category":
         togglePublishedCategoryMutation.mutate({ id });
-        break;
-      case "tag":
-        togglePublishedTagMutation.mutate({ id });
         break;
     }
   }

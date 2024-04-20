@@ -27,10 +27,7 @@ export function ListItemCompact({
 
   return (
     <li>
-      <Card
-        className={"h-full bg-card/50"}
-        style={{ backgroundColor: (listItem as Tag).color }}
-      >
+      <Card className={"h-full bg-card/50"}>
         <CardHeader className="p-3">
           <CardTitle className="text-md hover:underline">
             <Link href={editLink}>{listItem.name}</Link>

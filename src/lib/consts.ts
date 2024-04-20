@@ -53,8 +53,4 @@ export const adminNavigationItems = [
     title: "Categories",
     href: "/admin/categories",
   },
-  {
-    title: "Tags",
-    href: "/admin/tags",
-  },
 ];

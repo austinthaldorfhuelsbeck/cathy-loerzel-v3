@@ -8,7 +8,7 @@ export default async function AdminLayout({
   return (
     <>
       <Navigation />
-      <div className="flex flex-col gap-3 p-3 font-sans">{children}</div>
+      <main className="flex flex-col gap-3 p-3 font-sans">{children}</main>
     </>
   );
 }

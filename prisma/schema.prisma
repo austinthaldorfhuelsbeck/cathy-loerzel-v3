@@ -75,7 +75,6 @@ model Tag {
     description String?
     color       String
     slug        String     @unique
-    published   Boolean    @default(false)
     postTags    PostTag[]
     eventTags   EventTag[]
     createdAt   DateTime   @default(now())
