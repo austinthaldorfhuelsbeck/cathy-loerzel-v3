@@ -147,18 +147,6 @@ export function FormHeader({
       });
     },
   });
-  const deleteTagMutation = api.tags.delete.useMutation({
-    onSuccess: () => {
-      router.push("/admin/tags");
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
   function onDelete(id: number) {
     switch (type) {
       case "post":
@@ -169,9 +157,6 @@ export function FormHeader({
         break;
       case "category":
         deleteCategoryMutation.mutate({ id });
-        break;
-      case "tag":
-        deleteTagMutation.mutate({ id });
         break;
     }
   }

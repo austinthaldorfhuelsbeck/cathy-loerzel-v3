@@ -54,3 +54,11 @@ export const adminNavigationItems = [
     href: "/admin/categories",
   },
 ];
+
+export const tagColors = [
+  "#e4cdc2",
+  "#934a26",
+  "#a79186",
+  "#a8baba",
+  "#ac612c",
+];

@@ -23,7 +23,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Separator } from "@/components/ui/separator";
-import { testimonials } from "@/lib/consts";
+import { testimonials } from "@/lib/constants";
 import { QuoteIcon } from "lucide-react";
 import Link from "next/link";
 

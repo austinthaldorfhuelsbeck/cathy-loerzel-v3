@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { adminNavigationItems } from "@/lib/consts";
+import { adminNavigationItems } from "@/lib/constants";
 import { useClerk } from "@clerk/clerk-react";
 import { ExternalLinkIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
