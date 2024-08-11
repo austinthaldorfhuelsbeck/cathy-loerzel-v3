@@ -5,7 +5,8 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <section className="static h-96 w-full bg-gradient-to-b from-secondary/70 to-background sm:px-10 sm:pt-10 md:pr-48 lg:h-[450px] xl:h-[512px] 2xl:h-[600px]">
+    <section className="static h-96 w-full sm:px-10 sm:pt-10 md:pr-48 lg:h-[450px] xl:h-[512px] 2xl:h-[600px]">
+      <div className="absolute left-0 top-0 -z-10 h-96 w-full bg-secondary/70 lg:h-[450px] xl:h-[512px] 2xl:h-[600px]"></div>
       <Image
         src="/images/hero.jpg"
         alt="Cathy Loerzel"

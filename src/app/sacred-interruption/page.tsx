@@ -15,7 +15,7 @@ export default async function SacredInterruptionPage() {
 
   return (
     <>
-      <div className="bg-gradient-to-b from-destructive/35 to-background">
+      <div className="bg-gradient-to-b from-card/25 to-background">
         <ContentBlock
           title="Sacred Interruption"
           subtitle="With Cathy Loerzel, Tracy Johnson, Heather Stringer, and Christy Bauman"

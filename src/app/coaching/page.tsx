@@ -15,7 +15,7 @@ export default async function CoachingPage() {
 
   return (
     <>
-      <div className="bg-gradient-to-b from-accent/35 to-background">
+      <div className="bg-gradient-to-b from-card/25 to-background">
         <ContentBlock title="Story Work Coaching">
           <Image
             src="/images/walking-with-animals.jpg"
