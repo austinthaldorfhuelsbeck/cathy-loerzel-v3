@@ -5,6 +5,7 @@ import { eventTagsRouter } from "./routers/event-tags";
 import { eventRouter } from "./routers/events";
 import { postTagsRouter } from "./routers/post-tags";
 import { tagRouter } from "./routers/tags";
+import { contactRouter } from "./routers/contact";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   tags: tagRouter,
   postTags: postTagsRouter,
   eventTags: eventTagsRouter,
+  contact: contactRouter,
 });
 
 // export type definition of API

@@ -19,49 +19,52 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
+import { cn, contactFormSchema } from "@/lib/utils";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const phoneRegex = new RegExp(
-  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
-);
-const contactFormSchema = z.object({
-  name: z.string(),
-  company: z.string().optional(),
-  phone: z.string().regex(phoneRegex, "Invalid phone number").optional(),
-  email: z.string().email(),
-  isEvent: z.boolean(),
-  eventLocation: z.string().optional(),
-  eventDate: z.date().optional(),
-  message: z.string({
-    required_error: "What do you want to say?",
-  }),
-});
+import { type z } from "zod";
 
 const ContactForm = () => {
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      company: '',
+      isEvent: false,
+      eventLocation: '',
+      eventDate: undefined,
+      message: '',
+    }
   });
   const isEvent = form.watch("isEvent");
   const [thankYou, setThankYou] = useState(false);
 
-  function onSubmit(values: z.infer<typeof contactFormSchema>) {
-    toast({
-      title: "Message sent!",
-      description: (
-        <pre className="whitespace-pre-wrap">
-          {JSON.stringify(values, null, 2)}
-        </pre>
-      ),
-    });
-    setThankYou(true);
-    form.reset();
-  }
+  const { mutate: submitContact, isPending } = api.contact.submit.useMutation({
+    onSuccess: () => {
+      toast({
+        title: "Message sent successfully!",
+        description: "We'll get back to you soon.",
+      });
+      setThankYou(true);
+      form.reset();
+    },
+    onError: (error) => {
+      toast({
+        title: "Error sending message",
+        description: error.message || "Please try again later or contact us directly.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof contactFormSchema>) => {
+    submitContact(values);
+  };
 
   return (
     <section
@@ -82,6 +85,24 @@ const ContactForm = () => {
           <FormLabel className="font-sans text-2xl font-bold text-primary md:col-span-2">
             Reach out today.
           </FormLabel>
+
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    className="border-primary bg-transparent"
+                    type="text"
+                    placeholder="your name*"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
@@ -240,8 +261,16 @@ const ContactForm = () => {
           <Button
             type="submit"
             className="px-10 hover:bg-primary sm:mr-auto md:col-span-2"
+            disabled={isPending}
           >
-            Let&#39;s talk!
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              "Let's talk!"
+            )}
           </Button>
 
           {thankYou && (

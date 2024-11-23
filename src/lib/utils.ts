@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,3 +34,20 @@ export function convertToSlug(input: string) {
     .replace(/ /g, "-")
     .replace(/[^\w-]+/g, "");
 }
+
+const phoneRegex = new RegExp(
+  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
+);
+
+export const contactFormSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  company: z.string().optional(),
+  phone: z.string().regex(phoneRegex, "Invalid phone number").optional(),
+  isEvent: z.boolean(),
+  eventLocation: z.string().optional(),
+  eventDate: z.date().optional(),
+  message: z.string({
+    required_error: "What do you want to say?",
+  }),
+});
