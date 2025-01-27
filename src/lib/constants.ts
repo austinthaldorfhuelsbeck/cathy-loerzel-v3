@@ -66,3 +66,6 @@ export const tagColors = [
   "#e9e4d5",
   "#ac862d",
 ];
+
+export const fallbackFromEmail = "onboarding@resend.dev";
+export const fallbackToEmail = "cathy.loerzel@gmail.com";

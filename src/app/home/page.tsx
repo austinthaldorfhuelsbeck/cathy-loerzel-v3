@@ -17,11 +17,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-
-      {/* <SubscriptionForm /> */}
-
       <NewsletterForm />
-
       {upcomingEvents ? (
         <div className="mx-auto max-w-2xl lg:max-w-4xl">
           {upcomingEvents.length !== 0 && (
@@ -38,7 +34,6 @@ export default async function HomePage() {
       ) : (
         <Skeleton className="h-96 w-full" />
       )}
-
       <div className="mx-auto max-w-2xl lg:max-w-4xl">
         {!categories && (
           <div className="flex h-24 w-full gap-5 md:h-36">
@@ -49,7 +44,6 @@ export default async function HomePage() {
         )}
         {categories && <CategoryCards categories={categories} />}
       </div>
-
       <div id="contact">
         <ContactForm />
         <Link href="/redeeming-heartache">
@@ -62,7 +56,6 @@ export default async function HomePage() {
           />
         </Link>
       </div>
-
       <SubFooter />
     </>
   );
