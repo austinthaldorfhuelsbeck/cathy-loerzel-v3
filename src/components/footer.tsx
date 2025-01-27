@@ -35,7 +35,7 @@ export default async function Footer() {
             alt="logo"
             width={192}
             height={192}
-            className="w-48 object-cover mix-blend-screen"
+            className="h-auto w-48 object-cover mix-blend-screen"
           />
         </a>
         <div className="grid grid-cols-2 gap-5 sm:flex sm:flex-row">

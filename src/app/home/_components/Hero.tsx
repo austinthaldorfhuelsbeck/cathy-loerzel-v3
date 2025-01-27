@@ -12,7 +12,6 @@ const Hero = () => {
         alt="Cathy Loerzel"
         width={1920}
         height={1080}
-        objectFit="cover"
         className="h-full w-full object-cover object-top"
         quality={100}
       />
